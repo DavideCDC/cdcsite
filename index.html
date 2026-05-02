@@ -105,13 +105,15 @@ body::before {
 }
 
 .nav-logo {
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-weight: 800;
-  font-size: 22px;
-  letter-spacing: -0.03em;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+}
+
+.nav-logo img {
+  height: 32px;
+  width: auto;
+  filter: invert(1);
 }
 
 .nav-logo .dot {
@@ -1107,8 +1109,8 @@ footer {
 <!-- ============ NAVBAR ============ -->
 <nav class="nav">
   <a href="#" class="nav-logo">
+    <img src="logo.jpg" alt="CDCsite">
     <span class="dot"></span>
-    CDCsite
   </a>
   <div class="nav-links">
     <a href="#lavori">Lavori</a>
@@ -1621,7 +1623,7 @@ footer {
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <h4>CDCsite<span style="color: var(--accent);">.</span></h4>
+        <img src="logo.jpg" alt="CDCsite" style="height:40px; width:auto; filter:invert(1); margin-bottom:12px; display:block;">
         <p>Siti web professionali per piccole aziende. Da Aprilia (LT) a tutta Italia.</p>
       </div>
       <div class="footer-col">
