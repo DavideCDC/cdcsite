@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Siti web professionali per piccole aziende a 300€ una tantum + 30€/mese di manutenzione. Online in 7 giorni. Da Aprilia (LT).">
+<meta name="keywords" content="siti web, sviluppatore web, freelance, Aprilia, Latina, piccole aziende, sito vetrina">
+<title>CDCsite — Siti web seri. Senza prezzi da agenzia.</title>
+
+<!-- Open Graph -->
+<meta property="og:title" content="CDCsite — Siti web seri. Senza prezzi da agenzia.">
+<meta property="og:description" content="€300 una tantum + €30/mese. Online in 7 giorni. Demo gratis in 48h.">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #0A0A0A;
+  --bg-soft: #141414;
+  --surface: #1A1A1A;
+  --surface-2: #222;
+  --text: #FAFAF7;
+  --text-muted: #888;
+  --text-dim: #555;
+  --accent: #F5FF00;
+  --accent-dim: #C9D100;
+  --border: #1F1F1F;
+  --border-bright: #2A2A2A;
+  --danger: #FF4444;
+  --success: #00FF88;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Geist', -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Grain texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: overlay;
+}
+
+/* Typography */
+.display {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-variation-settings: "wdth" 100, "opsz" 96;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+}
+
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85em;
+  letter-spacing: 0;
+}
+
+/* Layout */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 32px;
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+}
+
+/* ============ NAVBAR ============ */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 20px 32px;
+  background: rgba(10,10,10,0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.03em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-logo .dot {
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: inline-block;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+}
+
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--accent); }
+
+.nav-cta {
+  background: var(--accent);
+  color: var(--bg);
+  padding: 10px 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 0;
+  transition: all 0.2s;
+}
+
+.nav-cta:hover {
+  background: var(--text);
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--accent);
+}
+
+@media (max-width: 768px) {
+  .nav { padding: 16px 20px; }
+  .nav-links { display: none; }
+}
+
+/* ============ HERO ============ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 140px 0 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-grid-lines {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 80px 80px;
+  opacity: 0.4;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  z-index: 1;
+}
+
+.hero-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.hero-tag::before {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.hero h1 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-variation-settings: "wdth" 95, "opsz" 96;
+  font-weight: 700;
+  font-size: clamp(48px, 9vw, 140px);
+  line-height: 0.88;
+  letter-spacing: -0.04em;
+  margin-bottom: 32px;
+}
+
+.hero h1 .underline {
+  position: relative;
+  display: inline-block;
+  color: var(--accent);
+}
+
+.hero h1 .cursor {
+  display: inline-block;
+  width: 0.5ch;
+  height: 0.85em;
+  background: var(--accent);
+  vertical-align: text-bottom;
+  margin-left: 4px;
+  animation: blink 1s steps(2) infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.hero-sub {
+  font-size: clamp(16px, 1.4vw, 20px);
+  color: var(--text-muted);
+  max-width: 620px;
+  margin-bottom: 48px;
+  line-height: 1.55;
+}
+
+.hero-sub strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg);
+  padding: 18px 28px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-primary:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 6px 6px 0 var(--text);
+}
+
+.btn-primary svg { width: 16px; height: 16px; }
+
+.btn-secondary {
+  color: var(--text);
+  padding: 18px 24px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid var(--border-bright);
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.hero-meta {
+  margin-top: 80px;
+  display: flex;
+  gap: 48px;
+  flex-wrap: wrap;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.hero-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hero-meta-num {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+/* ============ MARQUEE ============ */
+.marquee {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 24px 0;
+  overflow: hidden;
+  background: var(--bg-soft);
+}
+
+.marquee-track {
+  display: flex;
+  gap: 80px;
+  animation: scroll 30s linear infinite;
+  white-space: nowrap;
+}
+
+.marquee-item {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 80px;
+}
+
+.marquee-item::after {
+  content: '★';
+  color: var(--accent);
+  font-size: 24px;
+}
+
+@keyframes scroll {
+  to { transform: translateX(-50%); }
+}
+
+/* ============ SECTION ============ */
+section { padding: 120px 0; position: relative; z-index: 2; }
+
+.section-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.section-tag::before {
+  content: '//';
+  color: var(--text-dim);
+}
+
+.section-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 700;
+  font-size: clamp(36px, 5vw, 72px);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 24px;
+  max-width: 900px;
+}
+
+.section-title .accent { color: var(--accent); }
+
+.section-sub {
+  color: var(--text-muted);
+  font-size: 18px;
+  max-width: 600px;
+  margin-bottom: 64px;
+}
+
+/* ============ COMPARISON ============ */
+.compare {
+  background: var(--bg-soft);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: 1px solid var(--border-bright);
+}
+
+.compare-col {
+  padding: 48px 32px;
+  border-right: 1px solid var(--border-bright);
+}
+
+.compare-col:last-child {
+  border-right: none;
+  background: var(--bg);
+}
+
+.compare-col.them h3 {
+  color: var(--text-dim);
+  text-decoration: line-through;
+  text-decoration-color: var(--danger);
+}
+
+.compare-col.us h3 {
+  color: var(--accent);
+}
+
+.compare-col h3 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+
+.compare-col ul { list-style: none; }
+
+.compare-col li {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 15px;
+  color: var(--text-muted);
+}
+
+.compare-col.us li { color: var(--text); }
+
+.compare-col li::before {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.compare-col.them li::before {
+  content: '✗';
+  color: var(--danger);
+}
+
+.compare-col.us li::before {
+  content: '✓';
+  color: var(--accent);
+}
+
+@media (max-width: 768px) {
+  .compare-grid { grid-template-columns: 1fr; }
+  .compare-col { border-right: none; border-bottom: 1px solid var(--border-bright); }
+}
+
+/* ============ PRICE MONUMENT ============ */
+.price-monument {
+  text-align: center;
+  padding: 100px 0 60px;
+  border-bottom: 1px solid var(--border);
+}
+
+.price-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 24px;
+}
+
+.price-big {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-variation-settings: "wdth" 100, "opsz" 96;
+  font-weight: 800;
+  font-size: clamp(120px, 28vw, 420px);
+  line-height: 0.85;
+  letter-spacing: -0.06em;
+  background: linear-gradient(180deg, var(--text) 0%, var(--text-dim) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+}
+
+.price-big .currency {
+  font-size: 0.4em;
+  vertical-align: top;
+  position: relative;
+  top: 0.15em;
+  margin-right: 0.05em;
+  background: linear-gradient(180deg, var(--accent) 0%, var(--accent-dim) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.price-detail {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 32px;
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.price-detail span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.price-detail strong {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ============ FEATURES ============ */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0;
+  border: 1px solid var(--border);
+}
+
+.feature {
+  padding: 40px 32px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s;
+}
+
+.feature:hover {
+  background: var(--surface);
+}
+
+.feature-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.feature h4 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.feature p {
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* ============ MAINTENANCE ============ */
+.maintenance {
+  background: var(--bg-soft);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.maint-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+@media (max-width: 968px) {
+  .maint-layout { grid-template-columns: 1fr; gap: 48px; }
+}
+
+.maint-list { list-style: none; }
+
+.maint-list li {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border-bright);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 16px;
+}
+
+.maint-list li::before {
+  content: '→';
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.maint-price-card {
+  background: var(--bg);
+  border: 1px solid var(--border-bright);
+  padding: 48px 40px;
+  position: relative;
+}
+
+.maint-price-card::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 40px;
+  height: 40px;
+  background: var(--accent);
+}
+
+.maint-price-card .label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 24px;
+}
+
+.maint-price-card .amount {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 96px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  margin-bottom: 8px;
+}
+
+.maint-price-card .amount .currency {
+  color: var(--accent);
+}
+
+.maint-price-card .period {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+}
+
+.maint-price-card .note {
+  font-size: 14px;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  line-height: 1.5;
+}
+
+/* ============ PORTFOLIO ============ */
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.work-card {
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  padding: 0;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+  display: block;
+}
+
+.work-card:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 8px 8px 0 var(--accent);
+  border-color: var(--accent);
+}
+
+.work-preview {
+  aspect-ratio: 16 / 10;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border-bright);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.work-preview-fake {
+  width: 90%;
+  height: 80%;
+  background: linear-gradient(135deg, var(--surface-2) 0%, var(--bg-soft) 100%);
+  border: 1px solid var(--border-bright);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.work-preview-bar {
+  height: 22px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 5px;
+}
+
+.work-preview-bar span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-dim);
+}
+
+.work-preview-content {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.work-preview-content .line {
+  height: 6px;
+  background: var(--border-bright);
+  border-radius: 1px;
+}
+
+.work-preview-content .line.short { width: 40%; }
+.work-preview-content .line.med { width: 70%; }
+.work-preview-content .line.accent { background: var(--accent); width: 25%; height: 10px; }
+
+.work-info {
+  padding: 24px;
+}
+
+.work-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+
+.work-info h4 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+.work-info p {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.work-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ============ PROCESS ============ */
+.process-list {
+  border-top: 1px solid var(--border);
+}
+
+.process-step {
+  display: grid;
+  grid-template-columns: 80px 1fr 200px;
+  gap: 32px;
+  padding: 40px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  transition: padding 0.3s;
+}
+
+.process-step:hover {
+  padding-left: 16px;
+  background: var(--bg-soft);
+}
+
+.process-num {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 64px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.process-content h4 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.process-content p {
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+.process-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .process-step {
+    grid-template-columns: 60px 1fr;
+    gap: 16px;
+  }
+  .process-time { display: none; }
+  .process-num { font-size: 40px; }
+  .process-content h4 { font-size: 20px; }
+}
+
+/* ============ ABOUT ============ */
+.about {
+  background: var(--bg-soft);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.about-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+@media (max-width: 968px) {
+  .about-layout { grid-template-columns: 1fr; gap: 48px; }
+}
+
+.about-text p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+.about-text p strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.stack-card {
+  background: var(--bg);
+  border: 1px solid var(--border-bright);
+  padding: 32px;
+}
+
+.stack-card h4 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 20px;
+}
+
+.stack-card ul { list-style: none; }
+
+.stack-card li {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
+}
+
+.stack-card li:last-child { border-bottom: none; }
+
+.stack-card li strong {
+  color: var(--text);
+}
+
+/* ============ FAQ ============ */
+.faq-item {
+  border-bottom: 1px solid var(--border);
+  padding: 24px 0;
+  cursor: pointer;
+}
+
+.faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  user-select: none;
+  transition: color 0.2s;
+}
+
+.faq-item:hover .faq-question { color: var(--accent); }
+
+.faq-icon {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent);
+  font-size: 20px;
+  transition: transform 0.3s;
+  flex-shrink: 0;
+}
+
+.faq-item.open .faq-icon {
+  transform: rotate(45deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, margin-top 0.3s ease;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.faq-item.open .faq-answer {
+  max-height: 200px;
+  margin-top: 16px;
+}
+
+/* ============ CTA FINAL ============ */
+.cta-final {
+  text-align: center;
+  padding: 160px 20px;
+  border-top: 1px solid var(--border);
+  position: relative;
+}
+
+.cta-final::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(245, 255, 0, 0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.cta-final h2 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(48px, 8vw, 120px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.cta-final p {
+  color: var(--text-muted);
+  font-size: 18px;
+  max-width: 500px;
+  margin: 0 auto 48px;
+  position: relative;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+/* ============ FOOTER ============ */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 48px 0 32px;
+  position: relative;
+  z-index: 2;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+
+@media (max-width: 768px) {
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+}
+
+.footer-brand h4 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+}
+
+.footer-brand p {
+  color: var(--text-muted);
+  font-size: 14px;
+  max-width: 320px;
+}
+
+.footer-col h5 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+}
+
+.footer-col ul { list-style: none; }
+
+.footer-col li {
+  padding: 6px 0;
+  font-size: 14px;
+}
+
+.footer-col a {
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-col a:hover { color: var(--accent); }
+
+.footer-bottom {
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--text-dim);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* ============ ANIMATIONS / REVEALS ============ */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  section { padding: 80px 0; }
+  .hero { padding: 120px 0 60px; min-height: auto; }
+  .hero-meta { gap: 24px; margin-top: 48px; }
+  .price-monument { padding: 60px 20px 40px; }
+  .price-detail { gap: 16px; font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ NAVBAR ============ -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <span class="dot"></span>
+    CDCsite
+  </a>
+  <div class="nav-links">
+    <a href="#lavori">Lavori</a>
+    <a href="#prezzi">Prezzi</a>
+    <a href="#processo">Come funziona</a>
+    <a href="#chi-sono">Chi sono</a>
+  </div>
+  <a href="#contatti" class="nav-cta">Demo gratis →</a>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-grid-lines"></div>
+  <div class="container">
+    <div class="hero-tag">CDCsite — Aprilia, Lazio</div>
+    <h1>
+      Siti web seri.<br>
+      <span class="underline">Senza prezzi</span><br>
+      da agenzia<span class="cursor"></span>
+    </h1>
+    <p class="hero-sub">
+      <strong>€300 una tantum + €30/mese</strong> di manutenzione. Niente fregature, niente abbonamenti che si rinnovano nel sonno. Solo un sito veloce, ottimizzato per Google, online in <strong>5-7 giorni</strong>.
+    </p>
+    <div class="hero-actions">
+      <a href="#contatti" class="btn-primary">
+        Voglio una demo gratis
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#lavori" class="btn-secondary">
+        Vedi i lavori →
+      </a>
+    </div>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="hero-meta-num">5+</span>
+        <span>Siti consegnati</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-num">7gg</span>
+        <span>Tempo medio</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-num">48h</span>
+        <span>Demo gratuita</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-num">0€</span>
+        <span>Anticipo per la demo</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MARQUEE ============ -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span class="marquee-item">300€ tutto compreso</span>
+    <span class="marquee-item">Online in una settimana</span>
+    <span class="marquee-item">Demo gratis prima di pagare</span>
+    <span class="marquee-item">Hosting Vercel incluso</span>
+    <span class="marquee-item">Dominio incluso</span>
+    <span class="marquee-item">300€ tutto compreso</span>
+    <span class="marquee-item">Online in una settimana</span>
+    <span class="marquee-item">Demo gratis prima di pagare</span>
+    <span class="marquee-item">Hosting Vercel incluso</span>
+    <span class="marquee-item">Dominio incluso</span>
+  </div>
+</div>
+
+<!-- ============ COMPARISON ============ -->
+<section class="compare">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag">La verità sulle agenzie</div>
+      <h2 class="section-title">Quello che ti chiedono <span class="accent">vs</span> quello che faccio io</h2>
+      <p class="section-sub">Stesso lavoro. Prezzo diverso. Decidi tu.</p>
+    </div>
+
+    <div class="compare-grid reveal">
+      <div class="compare-col them">
+        <h3>Agenzia tradizionale</h3>
+        <ul>
+          <li>1.500 — 3.000€ solo per partire</li>
+          <li>2-3 mesi di tempo per la consegna</li>
+          <li>Riunioni infinite per ogni modifica</li>
+          <li>50€ ogni volta che cambi un orario</li>
+          <li>Contratti annuali con penali</li>
+          <li>"Le rispondiamo entro 7-10 giorni lavorativi"</li>
+          <li>Dominio e hosting fatturati a parte</li>
+        </ul>
+      </div>
+      <div class="compare-col us">
+        <h3>CDCsite</h3>
+        <ul>
+          <li>300€ una tantum. Tutto incluso.</li>
+          <li>5-7 giorni dalla conferma</li>
+          <li>Demo gratis prima ancora di pagare</li>
+          <li>Modifiche illimitate i primi 30 giorni</li>
+          <li>30€/mese, disdici quando vuoi</li>
+          <li>WhatsApp diretto, rispondo in giornata</li>
+          <li>Dominio + hosting Vercel inclusi</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICE MONUMENT ============ -->
+<section id="prezzi" class="price-monument">
+  <div class="container">
+    <div class="reveal">
+      <div class="price-label">Una tantum, tutto incluso</div>
+      <div class="price-big"><span class="currency">€</span>300</div>
+      <div class="price-detail">
+        <span><strong>+ €30/mese</strong> manutenzione</span>
+        <span>•</span>
+        <span><strong>0€</strong> per la demo</span>
+        <span>•</span>
+        <span>Disdici <strong>quando vuoi</strong></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURES ============ -->
+<section>
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag">Cosa include €300</div>
+      <h2 class="section-title">Tutto quello che ti <span class="accent">serve davvero</span>.</h2>
+      <p class="section-sub">Niente add-on nascosti, niente "ti serve anche questo a parte". Quello che vedi è quello che paghi.</p>
+    </div>
+
+    <div class="features-grid reveal">
+      <div class="feature">
+        <span class="feature-num">01</span>
+        <h4>Sito professionale<br>e mobile-friendly</h4>
+        <p>Design moderno, pensato prima per il telefono. Si vede bene ovunque, su qualsiasi schermo.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-num">02</span>
+        <h4>Dominio incluso<br>(.it / .com / .eu)</h4>
+        <p>Il tuo dominio personalizzato è incluso nel prezzo. Niente sovrapprezzi nascosti.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-num">03</span>
+        <h4>Hosting su Vercel</h4>
+        <p>La stessa tecnologia usata da Netflix, TikTok, Notion. Veloce e sicuro, sempre online.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-num">04</span>
+        <h4>Google Business Profile</h4>
+        <p>Configuro il tuo profilo Google Maps così le persone ti trovano cercando "[la tua attività] vicino a me".</p>
+      </div>
+      <div class="feature">
+        <span class="feature-num">05</span>
+        <h4>SEO base ottimizzato</h4>
+        <p>Meta tag, sitemap, schema.org, immagini ottimizzate. Tutto quello che serve per essere indicizzato.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-num">06</span>
+        <h4>Modifiche illimitate<br>per 30 giorni</h4>
+        <p>Vuoi cambiare colori, foto, testi? Per il primo mese cambi quello che vuoi senza costi extra.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-num">07</span>
+        <h4>Form di contatto<br>e WhatsApp</h4>
+        <p>I clienti ti scrivono direttamente dal sito, via email o con un click su WhatsApp.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-num">08</span>
+        <h4>Online in 5-7 giorni</h4>
+        <p>Dal pagamento alla pubblicazione. Non aspetti mesi come con le agenzie.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MAINTENANCE ============ -->
+<section class="maintenance">
+  <div class="container">
+    <div class="maint-layout">
+      <div class="reveal">
+        <div class="section-tag">€30/mese — Opzionale</div>
+        <h2 class="section-title">Manutenzione, <span class="accent">se ti serve</span>.</h2>
+        <p class="section-sub">Il sito è tuo, lo paghi una volta. La manutenzione è opzionale: se vuoi che me ne occupi io, sono €30/mese. Disdici quando vuoi.</p>
+
+        <ul class="maint-list">
+          <li>Modifiche al sito (orari, prezzi, foto, testi)</li>
+          <li>Monitoraggio performance e velocità</li>
+          <li>Aggiornamenti di sicurezza</li>
+          <li>Backup automatici settimanali</li>
+          <li>Supporto WhatsApp prioritario</li>
+          <li>Report mensile di traffico Google</li>
+        </ul>
+      </div>
+
+      <div class="maint-price-card reveal">
+        <div class="label">Manutenzione mensile</div>
+        <div class="amount"><span class="currency">€</span>30</div>
+        <div class="period">/mese — disdici quando vuoi</div>
+        <div class="note">
+          Senza manutenzione il sito resta online comunque. Ma se vuoi che me ne occupi io invece di doverci pensare tu, questa è la cifra. Né di più, né di meno.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PORTFOLIO ============ -->
+<section id="lavori">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag">Lavori dal vivo</div>
+      <h2 class="section-title">Siti già <span class="accent">online</span>.</h2>
+      <p class="section-sub">Niente mockup. Tutti questi siti sono attivi adesso, fatti per attività reali. Cliccaci sopra e guardali.</p>
+    </div>
+
+    <div class="portfolio-grid reveal">
+
+      <a href="https://ninfea-beauty.vercel.app" target="_blank" rel="noopener" class="work-card">
+        <div class="work-preview">
+          <div class="work-preview-fake">
+            <div class="work-preview-bar"><span></span><span></span><span></span></div>
+            <div class="work-preview-content">
+              <div class="line accent"></div>
+              <div class="line med"></div>
+              <div class="line short"></div>
+              <div class="line"></div>
+              <div class="line med"></div>
+            </div>
+          </div>
+        </div>
+        <div class="work-info">
+          <div class="work-tag">Centro estetico</div>
+          <h4>Ninfea Beauty</h4>
+          <p>Aprilia (LT) — Sito vetrina con prenotazioni</p>
+          <div class="work-link">ninfea-beauty.vercel.app →</div>
+        </div>
+      </a>
+
+      <a href="https://aemmepetroli.com" target="_blank" rel="noopener" class="work-card">
+        <div class="work-preview">
+          <div class="work-preview-fake">
+            <div class="work-preview-bar"><span></span><span></span><span></span></div>
+            <div class="work-preview-content">
+              <div class="line accent"></div>
+              <div class="line"></div>
+              <div class="line med"></div>
+              <div class="line short"></div>
+              <div class="line"></div>
+            </div>
+          </div>
+        </div>
+        <div class="work-info">
+          <div class="work-tag">Distribuzione carburanti</div>
+          <h4>AEMME Petroli</h4>
+          <p>Sito aziendale + servizi B2B</p>
+          <div class="work-link">aemmepetroli.com →</div>
+        </div>
+      </a>
+
+      <a href="https://dsautoisa.com" target="_blank" rel="noopener" class="work-card">
+        <div class="work-preview">
+          <div class="work-preview-fake">
+            <div class="work-preview-bar"><span></span><span></span><span></span></div>
+            <div class="work-preview-content">
+              <div class="line accent"></div>
+              <div class="line med"></div>
+              <div class="line"></div>
+              <div class="line short"></div>
+              <div class="line med"></div>
+            </div>
+          </div>
+        </div>
+        <div class="work-info">
+          <div class="work-tag">Concessionaria auto</div>
+          <h4>DS Auto ISA</h4>
+          <p>Vetrina veicoli + form contatti</p>
+          <div class="work-link">dsautoisa.com →</div>
+        </div>
+      </a>
+
+      <a href="https://rcs-alpha.vercel.app" target="_blank" rel="noopener" class="work-card">
+        <div class="work-preview">
+          <div class="work-preview-fake">
+            <div class="work-preview-bar"><span></span><span></span><span></span></div>
+            <div class="work-preview-content">
+              <div class="line accent"></div>
+              <div class="line"></div>
+              <div class="line short"></div>
+              <div class="line med"></div>
+              <div class="line accent"></div>
+            </div>
+          </div>
+        </div>
+        <div class="work-info">
+          <div class="work-tag">E-commerce con Stripe</div>
+          <h4>RCS Alpha</h4>
+          <p>Pagamenti integrati e gestione ordini</p>
+          <div class="work-link">rcs-alpha.vercel.app →</div>
+        </div>
+      </a>
+
+      <a href="https://armadio-paz2.vercel.app" target="_blank" rel="noopener" class="work-card">
+        <div class="work-preview">
+          <div class="work-preview-fake">
+            <div class="work-preview-bar"><span></span><span></span><span></span></div>
+            <div class="work-preview-content">
+              <div class="line accent"></div>
+              <div class="line med"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line short"></div>
+            </div>
+          </div>
+        </div>
+        <div class="work-info">
+          <div class="work-tag">Web app</div>
+          <h4>Armadio Paz</h4>
+          <p>Applicazione gestionale custom</p>
+          <div class="work-link">armadio-paz2.vercel.app →</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROCESS ============ -->
+<section id="processo">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag">Come funziona</div>
+      <h2 class="section-title">Dal primo messaggio<br>al sito <span class="accent">online</span>.</h2>
+      <p class="section-sub">Quattro passi. Trasparente, veloce, senza sorprese.</p>
+    </div>
+
+    <div class="process-list reveal">
+      <div class="process-step">
+        <div class="process-num">01</div>
+        <div class="process-content">
+          <h4>Mi mandi un messaggio</h4>
+          <p>WhatsApp, email o telefono. Mi dici che attività hai e cosa ti serve. Bastano 5 minuti.</p>
+        </div>
+        <div class="process-time">Giorno 1</div>
+      </div>
+
+      <div class="process-step">
+        <div class="process-num">02</div>
+        <div class="process-content">
+          <h4>Ti faccio una demo gratis</h4>
+          <p>In 48 ore ti mando un'anteprima del tuo sito. Lo guardi, mi dici cosa cambieresti. Zero impegno, zero anticipo.</p>
+        </div>
+        <div class="process-time">Entro 48h</div>
+      </div>
+
+      <div class="process-step">
+        <div class="process-num">03</div>
+        <div class="process-content">
+          <h4>Se ti piace, lo finiamo</h4>
+          <p>Paghi solo se sei convinto. Anticipo 100€, saldo 200€ alla pubblicazione. Niente vincoli prima della demo.</p>
+        </div>
+        <div class="process-time">Decidi tu</div>
+      </div>
+
+      <div class="process-step">
+        <div class="process-num">04</div>
+        <div class="process-content">
+          <h4>Online in 5-7 giorni</h4>
+          <p>Dominio attivo, sito pubblicato, Google Business Profile configurato. Da qui in poi sei tu a comandare.</p>
+        </div>
+        <div class="process-time">Settimana 1</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="chi-sono" class="about">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag">Chi sono</div>
+      <h2 class="section-title">Sono <span class="accent">Davide</span>.</h2>
+    </div>
+
+    <div class="about-layout">
+      <div class="about-text reveal">
+        <p>
+          Sviluppo siti web per piccole aziende dalla mia base di <strong>Aprilia (LT)</strong>. Lavoro da solo, senza agenzia di mezzo, e questo si traduce in un'unica cosa: <strong>prezzi onesti</strong>.
+        </p>
+        <p>
+          Le agenzie hanno commerciali, project manager, designer, developer, account. Ognuno deve mangiare. Io sono uno solo, uso strumenti AI di ultima generazione (Antigravity, Claude) per essere veloce, e Vercel per l'hosting. Il risultato è uno: faccio in 7 giorni quello che loro fanno in 3 mesi, a un decimo del prezzo.
+        </p>
+        <p>
+          Niente filtri, niente filosofia da agenzia, niente "abbiamo bisogno di una riunione strategica". Mi dici cosa serve, te lo faccio.
+        </p>
+      </div>
+
+      <div class="stack-card reveal">
+        <h4>// Stack tecnologico</h4>
+        <ul>
+          <li><span>Code generation</span><strong>Antigravity + Claude</strong></li>
+          <li><span>Database</span><strong>Supabase</strong></li>
+          <li><span>Hosting</span><strong>Vercel</strong></li>
+          <li><span>Versioning</span><strong>GitHub</strong></li>
+          <li><span>Pagamenti</span><strong>Stripe</strong></li>
+          <li><span>Analytics</span><strong>Google Analytics</strong></li>
+          <li><span>Base operativa</span><strong>Aprilia (LT)</strong></li>
+          <li><span>Disponibilità</span><strong>WhatsApp diretto</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section>
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag">Domande frequenti</div>
+      <h2 class="section-title">Quello che <span class="accent">tutti</span> chiedono.</h2>
+    </div>
+
+    <div class="reveal" style="max-width: 800px; margin-top: 32px;">
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          Posso pagare a rate?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Sì. La struttura è 100€ all'avvio (dopo che hai visto la demo e dato l'ok), 200€ alla pubblicazione. Per importi maggiori (e-commerce, app custom) si concorda caso per caso.
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          Il dominio è davvero mio?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Sì. Il dominio viene registrato a tuo nome dal primo giorno. Se un giorno decidi di andare con un altro sviluppatore, te lo porti via senza problemi.
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          Cosa succede se voglio aggiungere una pagina dopo?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Se hai la manutenzione attiva (€30/mese), una pagina extra rientra nel servizio. Senza manutenzione, una pagina aggiuntiva costa 50€ una tantum.
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          Posso disdire la manutenzione quando voglio?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Sì, senza penali e senza vincoli. Mi mandi un messaggio, ti tolgo dalla manutenzione, il sito resta online normalmente. Se cambi idea poi, ti rimetto dentro.
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          Funziona bene su mobile?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Tutti i siti che faccio sono pensati prima per il mobile. Il 70% delle persone visiterà il tuo sito dal telefono, sarebbe sciocco non partire da lì.
+        </div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          E se voglio un e-commerce o qualcosa di più complesso?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          Faccio anche quelli — vedi RCS Alpha nel portfolio, ha pagamenti Stripe integrati. Il prezzo cambia in base alla complessità, ma sempre con la stessa filosofia: trasparente, fisso, senza brutte sorprese in fattura.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA FINAL ============ -->
+<section id="contatti" class="cta-final">
+  <div class="container">
+    <h2>Pronto a essere<br><span style="color: var(--accent);">online?</span></h2>
+    <p>Mandami un messaggio. Ti faccio una demo gratis del tuo sito in 48 ore. Senza impegno, senza anticipo, senza fregature.</p>
+    <div class="cta-buttons">
+      <a href="https://wa.me/393000000000?text=Ciao%20Davide%2C%20vorrei%20una%20demo%20del%20mio%20sito" class="btn-primary">
+        WhatsApp
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      </a>
+      <a href="mailto:hello@cdcsite.it" class="btn-secondary">
+        Email →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h4>CDCsite<span style="color: var(--accent);">.</span></h4>
+        <p>Siti web professionali per piccole aziende. Da Aprilia (LT) a tutta Italia.</p>
+      </div>
+      <div class="footer-col">
+        <h5>// Naviga</h5>
+        <ul>
+          <li><a href="#prezzi">Prezzi</a></li>
+          <li><a href="#lavori">Lavori</a></li>
+          <li><a href="#processo">Come funziona</a></li>
+          <li><a href="#chi-sono">Chi sono</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>// Contatti</h5>
+        <ul>
+          <li><a href="https://wa.me/393000000000">WhatsApp</a></li>
+          <li><a href="mailto:hello@cdcsite.it">Email</a></li>
+          <li><a href="https://github.com/DavideCDC" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 CDCsite — Aprilia (LT), Italia</span>
+      <span>Made with ☕ + Claude</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// FAQ toggle
+function toggleFaq(el) {
+  const wasOpen = el.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(item => item.classList.remove('open'));
+  if (!wasOpen) el.classList.add('open');
+}
+
+// Reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
