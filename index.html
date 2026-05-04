@@ -693,6 +693,7 @@ section { padding: 120px 0; position: relative; z-index: 2; }
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 24px;
+  perspective: 1400px;
 }
 
 .work-card {
@@ -2008,64 +2009,65 @@ document.querySelectorAll('.feature').forEach(card => {
   });
 });
 
-// ============ SCROLL REVEALS (3D) ============
+// ============ SCROLL REVEALS (3D depth) ============
 gsap.utils.toArray('.reveal').forEach((el) => {
   gsap.fromTo(el,
-    { opacity: 0, y: 70, rotationX: -14, transformPerspective: 1200, transformOrigin: 'top center' },
+    { opacity: 0, y: 80, rotationX: -22, z: -80, transformPerspective: 1000, transformOrigin: 'top center' },
     {
-      opacity: 1, y: 0, rotationX: 0,
-      duration: 1.1, ease: 'power3.out',
+      opacity: 1, y: 0, rotationX: 0, z: 0,
+      duration: 1.2, ease: 'power3.out',
       scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
     }
   );
 });
 
-// ============ FEATURE CARDS STAGGER ============
+// ============ FEATURE CARDS STAGGER (3D pop) ============
 gsap.utils.toArray('.feature').forEach((el, i) => {
   gsap.fromTo(el,
-    { opacity: 0, y: 40, scale: 0.95 },
+    { opacity: 0, y: 50, scale: 0.88, rotationX: -25, z: -50, transformPerspective: 800, transformOrigin: 'top center' },
     {
-      opacity: 1, y: 0, scale: 1,
-      duration: 0.7, ease: 'power3.out',
-      delay: (i % 4) * 0.08,
+      opacity: 1, y: 0, scale: 1, rotationX: 0, z: 0,
+      duration: 0.9, ease: 'power3.out',
+      delay: (i % 4) * 0.1,
       scrollTrigger: { trigger: el, start: 'top 92%' }
     }
   );
 });
 
-// ============ COMPARE COLUMNS ============
+// ============ COMPARE COLUMNS (3D flip-in) ============
 gsap.utils.toArray('.compare-col').forEach((el, i) => {
   gsap.fromTo(el,
-    { opacity: 0, x: i === 0 ? -60 : 60 },
+    { opacity: 0, x: i === 0 ? -80 : 80, rotationY: i === 0 ? -25 : 25, transformPerspective: 900, transformOrigin: i === 0 ? 'right center' : 'left center' },
     {
-      opacity: 1, x: 0,
-      duration: 1, ease: 'power3.out',
+      opacity: 1, x: 0, rotationY: 0,
+      duration: 1.1, ease: 'power3.out',
       scrollTrigger: { trigger: el, start: 'top 85%' }
     }
   );
 });
 
-// ============ PROCESS STEPS ============
+// ============ PROCESS STEPS (3D slide) ============
 gsap.utils.toArray('.process-step').forEach((el, i) => {
   gsap.fromTo(el,
-    { opacity: 0, x: -40 },
+    { opacity: 0, x: -60, rotationY: -18, z: -40, transformPerspective: 900, transformOrigin: 'left center' },
     {
-      opacity: 1, x: 0,
-      duration: 0.8, ease: 'power3.out',
-      delay: i * 0.1,
+      opacity: 1, x: 0, rotationY: 0, z: 0,
+      duration: 1, ease: 'power3.out',
+      delay: i * 0.12,
       scrollTrigger: { trigger: el, start: 'top 88%' }
     }
   );
 });
 
-// ============ WORK CARDS ============
+// ============ WORK CARDS (3D stagger) ============
 gsap.utils.toArray('.work-card').forEach((el, i) => {
+  const dir = i % 2 === 0 ? -20 : 20;
   gsap.fromTo(el,
-    { opacity: 0, y: 60, scale: 0.92 },
+    { opacity: 0, y: 70, scale: 0.9, rotationY: dir, z: -60, transformPerspective: 1100, transformOrigin: 'center bottom' },
     {
-      opacity: 1, y: 0, scale: 1,
-      duration: 0.9, ease: 'power3.out',
-      delay: (i % 3) * 0.12,
+      opacity: 1, y: 0, scale: 1, rotationY: 0, z: 0,
+      duration: 1, ease: 'power3.out',
+      delay: (i % 3) * 0.14,
       scrollTrigger: { trigger: el, start: 'top 88%' }
     }
   );
@@ -2110,13 +2112,13 @@ if (priceBig) {
   });
 }
 
-// ============ SECTION TITLES ============
+// ============ SECTION TITLES (3D) ============
 gsap.utils.toArray('.section-title').forEach(el => {
   gsap.fromTo(el,
-    { opacity: 0, y: 50 },
+    { opacity: 0, y: 60, rotationX: -20, z: -50, transformPerspective: 900, transformOrigin: 'top left' },
     {
-      opacity: 1, y: 0,
-      duration: 1.1, ease: 'expo.out',
+      opacity: 1, y: 0, rotationX: 0, z: 0,
+      duration: 1.2, ease: 'expo.out',
       scrollTrigger: { trigger: el, start: 'top 85%' }
     }
   );
@@ -2138,6 +2140,7 @@ gsap.to('.hero-grid-lines', {
 gsap.to('.hero h1', {
   yPercent: -30,
   opacity: 0.3,
+  immediateRender: false,
   ease: 'none',
   scrollTrigger: {
     trigger: '.hero',
