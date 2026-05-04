@@ -1301,14 +1301,113 @@ section:hover::after { opacity: 1; }
   animation-duration: 18s;
   animation-direction: reverse;
 }
+
+/* ============ SPIRAL SCROLL ============ */
+#spiral-wrap {
+  transform-style: preserve-3d;
+  transform-origin: center top;
+  will-change: transform;
+}
+
+/* Each section gets a spiral-item class for individual animation */
+.spiral-item {
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+/* Spiral scroll indicator */
+.spiral-indicator {
+  position: fixed;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.spiral-indicator.visible { opacity: 1; }
+.spiral-indicator svg {
+  width: 36px;
+  height: 36px;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  fill: none;
+  animation: spiralSpin 3s linear infinite;
+  filter: drop-shadow(0 0 6px rgba(245,255,0,0.5));
+}
+.spiral-indicator span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  opacity: 0.7;
+}
+@keyframes spiralSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Background vortex visual (purely decorative) */
+.vortex-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.vortex-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px solid rgba(245,255,0,0.025);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0s;
+  animation: vortexExpand 8s ease-out infinite;
+}
+.vortex-ring:nth-child(2)  { animation-delay: -2s; width: 40vw;  height: 40vw; }
+.vortex-ring:nth-child(3)  { animation-delay: -4s; width: 70vw;  height: 70vw; }
+.vortex-ring:nth-child(4)  { animation-delay: -6s; width: 110vw; height: 110vw; }
+.vortex-ring:nth-child(5)  { animation-delay: -1s; width: 55vw;  height: 55vw; }
+.vortex-ring:nth-child(6)  { animation-delay: -3s; width: 90vw;  height: 90vw; }
+@keyframes vortexExpand {
+  0%   { transform: translate(-50%,-50%) scale(0) rotate(0deg);   opacity: 0.6; }
+  100% { transform: translate(-50%,-50%) scale(1) rotate(180deg); opacity: 0; }
+}
 </style>
 </head>
 <body>
+
+<!-- Vortex decorative rings -->
+<div class="vortex-bg">
+  <div class="vortex-ring"></div>
+  <div class="vortex-ring"></div>
+  <div class="vortex-ring"></div>
+  <div class="vortex-ring"></div>
+  <div class="vortex-ring"></div>
+</div>
 
 <!-- Custom cursor -->
 <div class="cursor-dot" id="cursorDot"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 <div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- Spiral scroll indicator -->
+<div class="spiral-indicator" id="spiralIndicator">
+  <svg viewBox="0 0 36 36">
+    <path d="M18 4 C26 4 32 10 32 18 C32 26 26 32 18 32 C10 32 4 26 4 18 C4 12 8 7 14 5"/>
+    <polygon points="14,2 14,8 20,5" fill="rgba(245,255,0,0.8)" stroke="none"/>
+  </svg>
+  <span>Scroll</span>
+</div>
 
 <!-- ============ NAVBAR ============ -->
 <nav class="nav">
@@ -1323,6 +1422,8 @@ section:hover::after { opacity: 1; }
   </div>
   <a href="#contatti" class="nav-cta">Demo gratis →</a>
 </nav>
+
+<div id="spiral-wrap">
 
 <!-- ============ HERO ============ -->
 <section class="hero">
@@ -1867,6 +1968,123 @@ window.addEventListener('scroll', () => {
   const winHeight = document.documentElement.scrollHeight - window.innerHeight;
   const scrolled = (window.scrollY / winHeight) * 100;
   scrollProgress.style.width = scrolled + '%';
+}, { passive: true });
+
+// ============ SPIRAL SCROLL INDICATOR ============
+const spiralIndicator = document.getElementById('spiralIndicator');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 120) {
+    spiralIndicator.classList.add('visible');
+  } else {
+    spiralIndicator.classList.remove('visible');
+  }
+}, { passive: true });
+
+// ============ SPIRAL SCROLL ENGINE ============
+(function initSpiralScroll() {
+  // We animate each direct child section/div of #spiral-wrap
+  // along a spiral path: translateX oscillates like a sine wave,
+  // while rotateZ applies a gentle twist — together producing
+  // a barrel/spiral sensation.
+
+  const sections = document.querySelectorAll('#spiral-wrap > section, #spiral-wrap > .marquee');
+  const TOTAL = sections.length;
+
+  sections.forEach((section, i) => {
+    // Skip the hero — it's the entry point, no incoming spiral
+    if (i === 0) return;
+
+    // Spiral math:
+    // Each section enters from alternating sides + slight rotation
+    const side = i % 2 === 0 ? 1 : -1;
+    const spiralRadius = 120 + i * 18; // pixels of horizontal offset
+    const angle = i * 22;              // degrees of initial twist
+    const depth = 80 + i * 12;        // z-depth starting point
+
+    gsap.fromTo(section,
+      {
+        opacity: 0,
+        x: spiralRadius * side,
+        y: 60,
+        z: -depth,
+        rotateZ: angle * side * 0.08,
+        rotateY: -18 * side,
+        scale: 0.88,
+        transformPerspective: 1200,
+        transformOrigin: 'center center',
+      },
+      {
+        opacity: 1,
+        x: 0,
+        y: 0,
+        z: 0,
+        rotateZ: 0,
+        rotateY: 0,
+        scale: 1,
+        duration: 1.4,
+        ease: 'expo.out',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 90%',
+          end: 'top 30%',
+          scrub: 0.8,
+          toggleActions: 'play none none reverse',
+        }
+      }
+    );
+
+    // Exit spiral: sections gently twist out as we scroll past them
+    gsap.to(section, {
+      x: -spiralRadius * side * 0.4,
+      y: -30,
+      z: -40,
+      rotateZ: -angle * side * 0.04,
+      opacity: 0.6,
+      scale: 0.97,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: section,
+        start: 'bottom 60%',
+        end: 'bottom top',
+        scrub: 1.2,
+      }
+    });
+  });
+
+  // ============ GLOBAL BARREL ROLL EFFECT ============
+  // The entire #spiral-wrap subtly rotates as we scroll,
+  // as if the page is a roll of film being unwound.
+  gsap.to('#spiral-wrap', {
+    ease: 'none',
+    scrollTrigger: {
+      trigger: 'body',
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 1,
+      onUpdate: (self) => {
+        // Oscillating x-shift simulates spiral path on the container
+        const progress = self.progress;
+        const spiralX = Math.sin(progress * Math.PI * 3) * 14;
+        const spiralRot = Math.sin(progress * Math.PI * 4) * 0.25;
+        gsap.set('#spiral-wrap', {
+          x: spiralX,
+          rotateZ: spiralRot,
+        });
+      }
+    }
+  });
+
+})();
+
+// ============ VORTEX INTENSITY ON SCROLL ============
+// Intensify vortex ring animation speed based on scroll velocity
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const velocity = Math.abs(window.scrollY - lastScroll);
+  lastScroll = window.scrollY;
+  const rings = document.querySelectorAll('.vortex-ring');
+  const speed = Math.max(8 - velocity * 0.1, 1.5); // min 1.5s duration
+  rings.forEach(r => r.style.animationDuration = speed + 's');
 }, { passive: true });
 
 // ============ CUSTOM CURSOR ============
