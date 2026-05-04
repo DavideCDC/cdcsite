@@ -2354,7 +2354,8 @@ window.addEventListener('scroll', () => {
 
     // ---- EXIT: section flies PAST the viewer ----
     // (skipped for the last section — footer/CTA stays)
-    if (i < sections.length - 1) {
+    // (skipped for hero — it stays fixed, avoids opacity-scrub lag bug on scroll-back)
+    if (i < sections.length - 1 && i !== 0) {
       gsap.fromTo(section,
         {
           transformPerspective: 1400,
