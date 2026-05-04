@@ -743,6 +743,7 @@ section { padding: 120px 0; position: relative; z-index: 2; }
   overflow: hidden;
   background: var(--bg);
   border-bottom: 1px solid var(--border-bright);
+  will-change: transform;
 }
 
 .work-preview-live .browser-chrome {
@@ -1978,7 +1979,7 @@ body {
               <span class="dot"></span><span class="dot"></span><span class="dot"></span>
               <div class="url-bar">aemmepetroli.com</div>
             </div>
-            <iframe src="https://aemmepetroli.com" loading="lazy" scrolling="no" title="AEMME Petroli"></iframe>
+            <iframe data-src="https://aemmepetroli.com" scrolling="no" title="AEMME Petroli"></iframe>
           </div>
         </div>
         <div class="work-info">
@@ -1996,7 +1997,7 @@ body {
               <span class="dot"></span><span class="dot"></span><span class="dot"></span>
               <div class="url-bar">dsautoisa.com</div>
             </div>
-            <iframe src="https://dsautoisa.com" loading="lazy" scrolling="no" title="DS Auto ISA"></iframe>
+            <iframe data-src="https://dsautoisa.com" scrolling="no" title="DS Auto ISA"></iframe>
           </div>
         </div>
         <div class="work-info">
@@ -2014,7 +2015,7 @@ body {
               <span class="dot"></span><span class="dot"></span><span class="dot"></span>
               <div class="url-bar">rcs-alpha.vercel.app</div>
             </div>
-            <iframe src="https://rcs-alpha.vercel.app" loading="lazy" scrolling="no" title="RCS Alpha"></iframe>
+            <iframe data-src="https://rcs-alpha.vercel.app" scrolling="no" title="RCS Alpha"></iframe>
           </div>
         </div>
         <div class="work-info">
@@ -2607,19 +2608,35 @@ gsap.utils.toArray('.process-step').forEach((el, i) => {
   );
 });
 
-// ============ WORK CARDS (3D stagger) ============
+// ============ WORK CARDS (smooth fade-up stagger — no 3D, lighter with iframes) ============
 gsap.utils.toArray('.work-card').forEach((el, i) => {
-  const dir = i % 2 === 0 ? -20 : 20;
   gsap.fromTo(el,
-    { opacity: 0, y: 70, scale: 0.9, rotationY: dir, z: -60, transformPerspective: 1100, transformOrigin: 'center bottom' },
+    { opacity: 0, y: 48 },
     {
-      opacity: 1, y: 0, scale: 1, rotationY: 0, z: 0,
-      duration: 1, ease: 'power3.out',
-      delay: (i % 3) * 0.14,
-      scrollTrigger: { trigger: el, start: 'top 88%' }
+      opacity: 1, y: 0,
+      duration: 0.75, ease: 'power2.out',
+      delay: i * 0.1,
+      scrollTrigger: { trigger: el, start: 'top 90%' }
     }
   );
 });
+
+// ============ IFRAME TRUE LAZY LOAD ============
+// Iframes use data-src — only set src when the card scrolls into view
+(function lazyLoadIframes() {
+  const iframes = document.querySelectorAll('iframe[data-src]');
+  if (!iframes.length) return;
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const iframe = entry.target;
+        iframe.src = iframe.dataset.src;
+        observer.unobserve(iframe);
+      }
+    });
+  }, { rootMargin: '200px' }); // start loading 200px before visible
+  iframes.forEach(iframe => observer.observe(iframe));
+})();
 
 // ============ PRICE PIN + SCALE DRAMATIC ============
 const priceMonument = document.querySelector('.price-monument');
