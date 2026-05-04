@@ -19,8 +19,7 @@
 <!-- GSAP + ScrollTrigger (100% free from May 2025) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<!-- Lenis smooth scroll -->
-<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+<!-- Native scroll, no Lenis -->
 
 <style>
 :root {
@@ -1142,6 +1141,105 @@ body { animation: pageIn .5s ease forwards; }
 .reveal { opacity: 0; transform: translateY(40px); }
 .reveal.visible { opacity: 1; transform: translateY(0); transition: opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); }
 
+
+/* ============ SCROLL PROGRESS BAR ============ */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0%;
+  background: var(--accent);
+  z-index: 200;
+  box-shadow: 0 0 12px var(--accent);
+  transition: width 0.05s linear;
+}
+
+/* ============ 3D TILT WORK CARDS ============ */
+.work-card {
+  transform-style: preserve-3d;
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.work-card .work-info,
+.work-card .work-preview {
+  transform-style: preserve-3d;
+}
+
+.work-card .work-info h4,
+.work-card .work-tag {
+  transform: translateZ(20px);
+}
+
+/* ============ HERO PARALLAX LAYERS ============ */
+.hero h1, .hero-sub, .hero-actions {
+  will-change: transform;
+}
+
+/* ============ PIN PRICE MONUMENT ============ */
+.price-monument {
+  position: relative;
+  padding: 140px 0 100px;
+  overflow: hidden;
+}
+
+.price-monument-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(245,255,0,0.08) 0%, transparent 60%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ============ ACCENT COLOR SHIFT ============ */
+.accent-shift {
+  background: linear-gradient(90deg, var(--accent), #00FF88, var(--accent));
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: accent-flow 8s linear infinite;
+}
+
+@keyframes accent-flow {
+  to { background-position: 200% 0; }
+}
+
+/* ============ NOISE INTENSIFIES ON SCROLL ============ */
+body::before {
+  transition: opacity 0.5s ease;
+}
+
+/* ============ SECTION REVEAL WITH SCALE ============ */
+.scale-in {
+  opacity: 0;
+  transform: scale(0.94);
+  transform-origin: center;
+  transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scale-in.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ============ DYNAMIC BG SECTIONS ============ */
+section {
+  position: relative;
+}
+
+section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at var(--mx, 50%) var(--my, 50%), rgba(245,255,0,0.04) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+section:hover::after { opacity: 1; }
+
 /* Mobile adjustments */
 @media (max-width: 768px) {
   section { padding: 80px 0; }
@@ -1157,6 +1255,7 @@ body { animation: pageIn .5s ease forwards; }
 <!-- Custom cursor -->
 <div class="cursor-dot" id="cursorDot"></div>
 <div class="cursor-ring" id="cursorRing"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
 
 <!-- ============ NAVBAR ============ -->
 <nav class="nav">
@@ -1703,27 +1802,16 @@ body { animation: pageIn .5s ease forwards; }
 </footer>
 
 <script>
-// ============ LENIS SMOOTH SCROLL ============
-const lenis = new Lenis({
-  duration: 1.4,
-  easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-  smoothWheel: true,
-  wheelMultiplier: 0.8,
-});
-
-function raf(time) {
-  lenis.raf(time);
-  requestAnimationFrame(raf);
-}
-requestAnimationFrame(raf);
-
-// Sync Lenis with GSAP ScrollTrigger
-lenis.on('scroll', ScrollTrigger.update);
-gsap.ticker.add(time => lenis.raf(time * 1000));
-gsap.ticker.lagSmoothing(0);
-
 // ============ GSAP SETUP ============
 gsap.registerPlugin(ScrollTrigger);
+
+// ============ SCROLL PROGRESS BAR ============
+const scrollProgress = document.getElementById('scrollProgress');
+window.addEventListener('scroll', () => {
+  const winHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const scrolled = (window.scrollY / winHeight) * 100;
+  scrollProgress.style.width = scrolled + '%';
+}, { passive: true });
 
 // ============ CUSTOM CURSOR ============
 const dot = document.getElementById('cursorDot');
@@ -1736,19 +1824,17 @@ if (dot && ring) {
   document.addEventListener('mousemove', e => {
     mouseX = e.clientX;
     mouseY = e.clientY;
-    gsap.to(dot, { x: mouseX, y: mouseY, duration: 0.1, ease: 'none' });
+    gsap.to(dot, { x: mouseX, y: mouseY, duration: 0.08, ease: 'none' });
   });
 
-  // Ring lags behind
   (function animateRing() {
-    ringX += (mouseX - ringX) * 0.12;
-    ringY += (mouseY - ringY) * 0.12;
+    ringX += (mouseX - ringX) * 0.15;
+    ringY += (mouseY - ringY) * 0.15;
     gsap.set(ring, { x: ringX, y: ringY });
     requestAnimationFrame(animateRing);
   })();
 
-  // Hover effect on interactive elements
-  const hoverEls = document.querySelectorAll('a, button, .work-card, .faq-item, .btn-primary, .btn-secondary, .nav-cta');
+  const hoverEls = document.querySelectorAll('a, button, .work-card, .faq-item, .btn-primary, .btn-secondary, .nav-cta, .feature');
   hoverEls.forEach(el => {
     el.addEventListener('mouseenter', () => ring.classList.add('hovering'));
     el.addEventListener('mouseleave', () => ring.classList.remove('hovering'));
@@ -1758,33 +1844,45 @@ if (dot && ring) {
   document.addEventListener('mouseup', () => ring.classList.remove('clicking'));
 }
 
-// ============ HERO ANIMATION ============
+// ============ HERO INTRO ============
 const heroTl = gsap.timeline({ delay: 0.2 });
-
 heroTl
   .from('.hero-tag', { y: 20, opacity: 0, duration: 0.6, ease: 'power3.out' })
-  .from('.hero h1', { y: 60, opacity: 0, duration: 1, ease: 'expo.out' }, '-=0.2')
+  .from('.hero h1', { y: 80, opacity: 0, duration: 1.1, ease: 'expo.out' }, '-=0.2')
   .from('.hero-sub', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out' }, '-=0.5')
   .from('.hero-actions', { y: 20, opacity: 0, duration: 0.6, ease: 'power3.out' }, '-=0.4')
-  .from('.hero-meta-item', { y: 20, opacity: 0, duration: 0.5, stagger: 0.1, ease: 'power2.out' }, '-=0.3');
+  .from('.hero-meta-item', { y: 20, opacity: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' }, '-=0.3');
 
-// ============ COUNTER ANIMATION ============
-const counters = [
-  { el: document.querySelectorAll('.hero-meta-num')[0], target: 5, suffix: '+', duration: 1.5 },
-];
+// ============ HERO MOUSE PARALLAX ============
+const hero = document.querySelector('.hero');
+const heroH1 = document.querySelector('.hero h1');
+const heroGrid = document.querySelector('.hero-grid-lines');
+const heroTag = document.querySelector('.hero-tag');
 
-function animateCounter(el, target, suffix, duration) {
-  if (!el) return;
-  const obj = { val: 0 };
-  gsap.to(obj, {
-    val: target,
-    duration,
-    delay: 1.2,
-    ease: 'power2.out',
-    onUpdate: () => { el.textContent = Math.round(obj.val) + suffix; }
+if (hero && heroH1) {
+  hero.addEventListener('mousemove', (e) => {
+    const rect = hero.getBoundingClientRect();
+    const x = (e.clientX - rect.width / 2) / rect.width;
+    const y = (e.clientY - rect.height / 2) / rect.height;
+
+    gsap.to(heroH1, { x: x * 30, y: y * 15, duration: 1, ease: 'power2.out' });
+    gsap.to(heroGrid, { x: x * -50, y: y * -30, duration: 1.2, ease: 'power2.out' });
+    gsap.to(heroTag, { x: x * 20, duration: 1, ease: 'power2.out' });
+  });
+  hero.addEventListener('mouseleave', () => {
+    gsap.to([heroH1, heroGrid, heroTag], { x: 0, y: 0, duration: 1.2, ease: 'power3.out' });
   });
 }
-counters.forEach(c => animateCounter(c.el, c.target, c.suffix, c.duration));
+
+// ============ COUNTER HERO ============
+const heroNum = document.querySelectorAll('.hero-meta-num')[0];
+if (heroNum) {
+  const obj = { val: 0 };
+  gsap.to(obj, {
+    val: 5, duration: 1.5, delay: 1.2, ease: 'power2.out',
+    onUpdate: () => { heroNum.textContent = Math.round(obj.val) + '+'; }
+  });
+}
 
 // ============ MAGNETIC BUTTONS ============
 document.querySelectorAll('.btn-primary, .nav-cta').forEach(btn => {
@@ -1792,112 +1890,145 @@ document.querySelectorAll('.btn-primary, .nav-cta').forEach(btn => {
     const rect = this.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
-    gsap.to(this, { x: x * 0.22, y: y * 0.22, duration: 0.4, ease: 'power2.out' });
+    gsap.to(this, { x: x * 0.3, y: y * 0.3, duration: 0.4, ease: 'power2.out' });
   });
   btn.addEventListener('mouseleave', function() {
     gsap.to(this, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.4)' });
   });
 });
 
-// ============ SCROLL REVEALS (GSAP) ============
-// Generic .reveal elements
+// ============ 3D TILT ON WORK CARDS ============
+document.querySelectorAll('.work-card').forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const rotX = ((y - cy) / cy) * -8;
+    const rotY = ((x - cx) / cx) * 8;
+    gsap.to(card, {
+      rotationX: rotX,
+      rotationY: rotY,
+      transformPerspective: 1000,
+      duration: 0.4,
+      ease: 'power2.out',
+      transformOrigin: 'center'
+    });
+  });
+  card.addEventListener('mouseleave', () => {
+    gsap.to(card, {
+      rotationX: 0, rotationY: 0,
+      duration: 0.8,
+      ease: 'elastic.out(1, 0.5)'
+    });
+  });
+});
+
+// ============ FEATURE CARDS 3D HOVER ============
+document.querySelectorAll('.feature').forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const mx = ((e.clientX - rect.left) / rect.width) * 100;
+    const my = ((e.clientY - rect.top) / rect.height) * 100;
+    card.style.setProperty('--mx', mx + '%');
+    card.style.setProperty('--my', my + '%');
+  });
+});
+
+// ============ SCROLL REVEALS ============
 gsap.utils.toArray('.reveal').forEach((el, i) => {
   gsap.fromTo(el,
-    { opacity: 0, y: 50 },
+    { opacity: 0, y: 60 },
     {
       opacity: 1, y: 0,
-      duration: 0.9,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 88%',
-        toggleActions: 'play none none none',
-      },
-      delay: (i % 3) * 0.08,
+      duration: 1, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
     }
   );
 });
 
-// Section titles stagger
-gsap.utils.toArray('.section-title').forEach(el => {
-  gsap.fromTo(el,
-    { opacity: 0, y: 40 },
-    {
-      opacity: 1, y: 0,
-      duration: 1,
-      ease: 'expo.out',
-      scrollTrigger: { trigger: el, start: 'top 85%' }
-    }
-  );
-});
-
-// Feature cards stagger
+// ============ FEATURE CARDS STAGGER ============
 gsap.utils.toArray('.feature').forEach((el, i) => {
   gsap.fromTo(el,
-    { opacity: 0, y: 30 },
+    { opacity: 0, y: 40, scale: 0.95 },
     {
-      opacity: 1, y: 0,
-      duration: 0.6,
-      ease: 'power2.out',
-      delay: (i % 4) * 0.1,
-      scrollTrigger: { trigger: el, start: 'top 90%' }
+      opacity: 1, y: 0, scale: 1,
+      duration: 0.7, ease: 'power3.out',
+      delay: (i % 4) * 0.08,
+      scrollTrigger: { trigger: el, start: 'top 92%' }
     }
   );
 });
 
-// Compare columns
+// ============ COMPARE COLUMNS ============
 gsap.utils.toArray('.compare-col').forEach((el, i) => {
   gsap.fromTo(el,
-    { opacity: 0, x: i === 0 ? -40 : 40 },
+    { opacity: 0, x: i === 0 ? -60 : 60 },
     {
       opacity: 1, x: 0,
-      duration: 0.9,
-      ease: 'power3.out',
+      duration: 1, ease: 'power3.out',
       scrollTrigger: { trigger: el, start: 'top 85%' }
     }
   );
 });
 
-// Process steps
+// ============ PROCESS STEPS ============
 gsap.utils.toArray('.process-step').forEach((el, i) => {
   gsap.fromTo(el,
-    { opacity: 0, x: -30 },
+    { opacity: 0, x: -40 },
     {
       opacity: 1, x: 0,
-      duration: 0.7,
-      ease: 'power2.out',
+      duration: 0.8, ease: 'power3.out',
       delay: i * 0.1,
       scrollTrigger: { trigger: el, start: 'top 88%' }
     }
   );
 });
 
-// Work cards
+// ============ WORK CARDS ============
 gsap.utils.toArray('.work-card').forEach((el, i) => {
   gsap.fromTo(el,
-    { opacity: 0, y: 40, scale: 0.97 },
+    { opacity: 0, y: 60, scale: 0.92 },
     {
       opacity: 1, y: 0, scale: 1,
-      duration: 0.7,
-      ease: 'power2.out',
+      duration: 0.9, ease: 'power3.out',
       delay: (i % 3) * 0.12,
-      scrollTrigger: { trigger: el, start: 'top 90%' }
+      scrollTrigger: { trigger: el, start: 'top 88%' }
     }
   );
 });
 
-// Price monument - count up big number
+// ============ PRICE PIN + SCALE DRAMATIC ============
+const priceMonument = document.querySelector('.price-monument');
 const priceBig = document.querySelector('.price-big');
+
 if (priceBig) {
+  // Big scale animation while in view
+  gsap.fromTo(priceBig,
+    { scale: 0.5, opacity: 0 },
+    {
+      scale: 1, opacity: 1,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: priceMonument,
+        start: 'top 80%',
+        end: 'top 30%',
+        scrub: 1,
+      }
+    }
+  );
+
+  // Counter on enter
   ScrollTrigger.create({
     trigger: priceBig,
-    start: 'top 80%',
+    start: 'top 70%',
     once: true,
     onEnter: () => {
       const obj = { val: 0 };
       gsap.to(obj, {
         val: 300,
-        duration: 1.2,
+        duration: 1.4,
         ease: 'power2.out',
         onUpdate: () => {
           priceBig.innerHTML = '<span class="currency">€</span>' + Math.round(obj.val);
@@ -1907,39 +2038,78 @@ if (priceBig) {
   });
 }
 
-// ============ PARALLAX HERO GRID ============
+// ============ SECTION TITLES ============
+gsap.utils.toArray('.section-title').forEach(el => {
+  gsap.fromTo(el,
+    { opacity: 0, y: 50 },
+    {
+      opacity: 1, y: 0,
+      duration: 1.1, ease: 'expo.out',
+      scrollTrigger: { trigger: el, start: 'top 85%' }
+    }
+  );
+});
+
+// ============ HERO GRID PARALLAX ============
 gsap.to('.hero-grid-lines', {
-  yPercent: 30,
+  yPercent: 40,
   ease: 'none',
   scrollTrigger: {
     trigger: '.hero',
     start: 'top top',
     end: 'bottom top',
+    scrub: 1.5,
+  }
+});
+
+// ============ HERO TEXT FADE OUT ON SCROLL ============
+gsap.to('.hero h1', {
+  yPercent: -30,
+  opacity: 0.3,
+  ease: 'none',
+  scrollTrigger: {
+    trigger: '.hero',
+    start: 'top top',
+    end: 'bottom 30%',
     scrub: true,
   }
 });
 
 // ============ NAVBAR HIDE ON SCROLL ============
-let lastY = 0;
 ScrollTrigger.create({
-  start: 'top -80',
+  start: 'top -120',
   onUpdate: self => {
     const dir = self.direction;
-    if (dir === 1 && self.scroll() > 200) {
-      gsap.to('.nav', { y: -80, duration: 0.4, ease: 'power2.in' });
+    if (dir === 1 && self.scroll() > 300) {
+      gsap.to('.nav', { y: -90, duration: 0.4, ease: 'power2.in' });
     } else {
       gsap.to('.nav', { y: 0, duration: 0.4, ease: 'power2.out' });
     }
   }
 });
 
-// ============ SMOOTH SCROLL (Lenis handles it) ============
+// ============ MARQUEE PARALLAX ============
+gsap.to('.marquee-track', {
+  xPercent: -10,
+  ease: 'none',
+  scrollTrigger: {
+    trigger: '.marquee',
+    start: 'top bottom',
+    end: 'bottom top',
+    scrub: 2,
+  }
+});
+
+// ============ SMOOTH SCROLL (native scrollIntoView) ============
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function(e) {
-    const target = document.querySelector(this.getAttribute('href'));
+    const href = this.getAttribute('href');
+    if (href === '#') return;
+    const target = document.querySelector(href);
     if (target) {
       e.preventDefault();
-      lenis.scrollTo(target, { offset: -80, duration: 1.4 });
+      const top = target.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top, behavior: 'smooth' });
     }
   });
 });
@@ -1949,17 +2119,6 @@ function toggleFaq(el) {
   const wasOpen = el.classList.contains('open');
   document.querySelectorAll('.faq-item').forEach(item => item.classList.remove('open'));
   if (!wasOpen) el.classList.add('open');
-}
-
-// ============ MARQUEE SPEED ON HOVER ============
-const marqueeTrack = document.querySelector('.marquee-track');
-if (marqueeTrack) {
-  document.querySelector('.marquee').addEventListener('mouseenter', () => {
-    gsap.to(marqueeTrack, { animationDuration: '60s', duration: 1 });
-  });
-  document.querySelector('.marquee').addEventListener('mouseleave', () => {
-    gsap.to(marqueeTrack, { animationDuration: '30s', duration: 1 });
-  });
 }
 
 </script>
