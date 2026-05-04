@@ -233,6 +233,13 @@ body::before {
   line-height: 0.88;
   letter-spacing: -0.04em;
   margin-bottom: 32px;
+  /* CSS owns the opacity — GSAP must not touch it */
+  animation: heroH1In 0.65s cubic-bezier(0.14,1,0.34,1) 0.18s both;
+}
+
+@keyframes heroH1In {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .hero h1 .underline {
@@ -2452,8 +2459,8 @@ if (dot && ring) {
 // ============ HERO INTRO ============
 const heroTl = gsap.timeline({ delay: 0.1 });
 heroTl
-  .from('.hero-tag', { y: 16, opacity: 0, duration: 0.4, ease: 'power3.out' })
-  .from('.hero h1', { y: 40, opacity: 0, duration: 0.65, ease: 'expo.out' }, '-=0.1')
+  .from('.hero-tag', { y: 16, duration: 0.4, ease: 'power3.out' })
+  .from('.hero h1', { y: 40, duration: 0.65, ease: 'expo.out' }, '-=0.1')
   .from('.hero-sub', { y: 20, opacity: 0, duration: 0.5, ease: 'power3.out' }, '-=0.3')
   .from('.hero-actions', { y: 16, opacity: 0, duration: 0.4, ease: 'power3.out' }, '-=0.3')
   .from('.hero-meta-item', { y: 14, opacity: 0, duration: 0.4, stagger: 0.06, ease: 'power2.out' }, '-=0.2');
