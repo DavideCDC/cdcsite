@@ -21,8 +21,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <!-- Three.js for WebGL hero -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
-<!-- Lenis smooth scroll -->
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+
 
 <style>
 :root {
@@ -1978,39 +1977,13 @@ gsap.registerPlugin(ScrollTrigger);
 // ============ SCROLL PROGRESS BAR ============
 const scrollProgress = document.getElementById('scrollProgress');
 
-// ============================================================
-// LENIS SMOOTH SCROLL SETUP
-// Lenis replaces the default scroll with a buttery-smooth,
-// momentum-based scroll — essential for cinematic 3D effects.
-// ============================================================
-let lenis;
-try {
-  lenis = new Lenis({
-    duration: 1.6,
-    easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    smoothWheel: true,
-    wheelMultiplier: 1.0,
-    touchMultiplier: 2.0,
-  });
-  // Feed Lenis into GSAP ticker
-  lenis.on('scroll', ScrollTrigger.update);
-  gsap.ticker.add(time => lenis.raf(time * 1000));
-  gsap.ticker.lagSmoothing(0);
-
-  // Progress bar & spiral indicator via Lenis scroll event
-  lenis.on('scroll', ({ scroll, limit }) => {
-    if (scrollProgress) scrollProgress.style.width = ((scroll / limit) * 100) + '%';
-    const ind = document.getElementById('spiralIndicator');
-    if (ind) ind.classList.toggle('visible', scroll > 120);
-  });
-} catch(e) {
-  // Fallback if Lenis not loaded
-  console.warn('Lenis not available, using native scroll');
-  window.addEventListener('scroll', () => {
-    const maxS = document.documentElement.scrollHeight - window.innerHeight;
-    if (scrollProgress) scrollProgress.style.width = ((window.scrollY / maxS) * 100) + '%';
-  }, { passive: true });
-}
+// ============ SCROLL PROGRESS BAR & INDICATOR ============
+window.addEventListener('scroll', () => {
+  const maxS = document.documentElement.scrollHeight - window.innerHeight;
+  if (scrollProgress) scrollProgress.style.width = ((window.scrollY / maxS) * 100) + '%';
+  const ind = document.getElementById('spiralIndicator');
+  if (ind) ind.classList.toggle('visible', window.scrollY > 120);
+}, { passive: true });
 
 // ============================================================
 // CORN REVOLUTION STYLE — 3D FLYTHROUGH PER SECTION
@@ -2101,14 +2074,15 @@ try {
   });
 
   // Vortex rings speed up on fast scroll
-  if (lenis) {
-    lenis.on('scroll', ({ velocity }) => {
-      const speed = Math.max(8 - Math.abs(velocity) * 0.3, 1.5);
-      document.querySelectorAll('.vortex-ring').forEach(r => {
-        r.style.animationDuration = speed + 's';
-      });
+  let _lastSY = 0;
+  window.addEventListener('scroll', () => {
+    const vel = Math.abs(window.scrollY - _lastSY);
+    _lastSY = window.scrollY;
+    const speed = Math.max(8 - vel * 0.05, 2);
+    document.querySelectorAll('.vortex-ring').forEach(r => {
+      r.style.animationDuration = speed + 's';
     });
-  }
+  }, { passive: true });
 
 })();
 
