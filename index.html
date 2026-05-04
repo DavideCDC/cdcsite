@@ -688,6 +688,66 @@ section { padding: 120px 0; position: relative; z-index: 2; }
   line-height: 1.5;
 }
 
+/* ============ LIVE SITE PREVIEW IN CARD ============ */
+.work-preview-live {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border-bright);
+}
+
+.work-preview-live .browser-chrome {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 26px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 5px;
+  z-index: 5;
+  flex-shrink: 0;
+}
+
+.work-preview-live .browser-chrome .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-dim); flex-shrink: 0; }
+
+.work-preview-live .browser-chrome .url-bar {
+  flex: 1;
+  height: 15px;
+  background: var(--bg);
+  border-radius: 2px;
+  margin: 0 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.work-preview-live iframe {
+  position: absolute;
+  top: 26px;
+  left: 0;
+  width: 1280px;
+  height: 800px;
+  border: none;
+  pointer-events: none;
+  transform-origin: top left;
+  /* scale applied by JS */
+}
+
+/* Hover zoom on the preview */
+.work-card:hover .work-preview-live iframe {
+  transition: none;
+}
+
 /* ============ PORTFOLIO ============ */
 .portfolio-grid {
   display: grid;
@@ -1653,15 +1713,12 @@ body {
 
       <a href="https://aemmepetroli.com" target="_blank" rel="noopener" class="work-card">
         <div class="work-preview">
-          <div class="work-preview-fake">
-            <div class="work-preview-bar"><span></span><span></span><span></span></div>
-            <div class="work-preview-content">
-              <div class="line accent"></div>
-              <div class="line"></div>
-              <div class="line med"></div>
-              <div class="line short"></div>
-              <div class="line"></div>
+          <div class="work-preview-live">
+            <div class="browser-chrome">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              <div class="url-bar">aemmepetroli.com</div>
             </div>
+            <iframe src="https://aemmepetroli.com" loading="lazy" scrolling="no" title="AEMME Petroli"></iframe>
           </div>
         </div>
         <div class="work-info">
@@ -1674,15 +1731,12 @@ body {
 
       <a href="https://dsautoisa.com" target="_blank" rel="noopener" class="work-card">
         <div class="work-preview">
-          <div class="work-preview-fake">
-            <div class="work-preview-bar"><span></span><span></span><span></span></div>
-            <div class="work-preview-content">
-              <div class="line accent"></div>
-              <div class="line med"></div>
-              <div class="line"></div>
-              <div class="line short"></div>
-              <div class="line med"></div>
+          <div class="work-preview-live">
+            <div class="browser-chrome">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              <div class="url-bar">dsautoisa.com</div>
             </div>
+            <iframe src="https://dsautoisa.com" loading="lazy" scrolling="no" title="DS Auto ISA"></iframe>
           </div>
         </div>
         <div class="work-info">
@@ -1695,15 +1749,12 @@ body {
 
       <a href="https://rcs-alpha.vercel.app" target="_blank" rel="noopener" class="work-card">
         <div class="work-preview">
-          <div class="work-preview-fake">
-            <div class="work-preview-bar"><span></span><span></span><span></span></div>
-            <div class="work-preview-content">
-              <div class="line accent"></div>
-              <div class="line"></div>
-              <div class="line short"></div>
-              <div class="line med"></div>
-              <div class="line accent"></div>
+          <div class="work-preview-live">
+            <div class="browser-chrome">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              <div class="url-bar">rcs-alpha.vercel.app</div>
             </div>
+            <iframe src="https://rcs-alpha.vercel.app" loading="lazy" scrolling="no" title="RCS Alpha"></iframe>
           </div>
         </div>
         <div class="work-info">
@@ -2043,7 +2094,28 @@ window.addEventListener('scroll', () => {
 
 })();
 
-// ============ CUSTOM CURSOR ============
+// ============ LIVE PREVIEW IFRAME SCALER ============
+// Each iframe is 1280px wide (desktop). We scale it down
+// to fit the card using transform: scale(containerWidth/1280).
+// Runs on load + window resize for responsiveness.
+(function scaleWorkPreviews() {
+  function scale() {
+    document.querySelectorAll('.work-preview-live').forEach(container => {
+      const iframe = container.querySelector('iframe');
+      if (!iframe) return;
+      const w = container.clientWidth;
+      const s = w / 1280;
+      iframe.style.transform = `scale(${s})`;
+    });
+  }
+  // Run once DOM is ready, then on resize
+  scale();
+  window.addEventListener('resize', scale);
+  // Also re-run after fonts/images settle
+  window.addEventListener('load', scale);
+})();
+
+
 const dot = document.getElementById('cursorDot');
 const ring = document.getElementById('cursorRing');
 
