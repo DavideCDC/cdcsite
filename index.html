@@ -1302,16 +1302,25 @@ section:hover::after { opacity: 1; }
   animation-direction: reverse;
 }
 
-/* ============ SPIRAL SCROLL ============ */
+/* ============ 3D HELIX SCROLL — PILLAR EFFECT ============ */
 /*
-  Native scroll is kept intact.
-  JS reads window.scrollY each rAF frame and applies
-  a sinusoidal translateX + slight rotateZ to the wrapper,
-  so the page visually moves along a spiral path.
+  Imagine the page is wrapped around an invisible vertical
+  pillar. As you scroll down, the view rotates around that
+  pillar (rotateY), combined with perspective depth — giving
+  a true 3D helix / spiral staircase sensation.
+  Native scroll is 100% intact. We only add transforms.
 */
+body {
+  perspective: 1200px;
+  perspective-origin: 50% 35%;
+  overflow-x: hidden;
+}
+
 #spiral-wrap {
+  transform-style: preserve-3d;
   will-change: transform;
-  transform-origin: center top;
+  transform-origin: 50% 0;  /* rotate around top-center = pillar top */
+  backface-visibility: visible;
 }
 
 /* Each section gets a spiral-item class for individual animation */
@@ -1971,27 +1980,32 @@ gsap.registerPlugin(ScrollTrigger);
 const scrollProgress = document.getElementById('scrollProgress');
 
 // ============================================================
-// SPIRAL SCROLL — sinusoidal X overlay on native scroll
+// 3D HELIX SCROLL — PILLAR EFFECT
 // ============================================================
-// Native scroll is 100% intact — the page scrolls normally.
-// Each rAF frame we read window.scrollY and apply:
-//   translateX = sin(scrollY / WAVELENGTH * 2π) * AMPLITUDE
-//   rotateZ    = cos(...)  * TILT_MAX
-// to #spiral-wrap, so the visual path curves left↔right
-// like a spiral while still scrolling up/down normally.
+// The page appears to be wrapped around an invisible vertical
+// pillar. As scrollY increases:
+//   rotateY  = sin(phase) * MAX_ROT_Y  → rotates around Y axis (depth)
+//   translateZ = sin²(phase) * -TZ     → pushes back as it turns
+//   rotateZ  = cos(phase) * TILT       → slight lean along the helix
+//
+// With CSS perspective on body, this makes the content feel
+// like it's curving in 3D space around an invisible column.
+// Scrolling down = descending the helix. Scrolling up = ascending.
 // ============================================================
-(function initSpiralScroll() {
+(function initHelixScroll() {
 
   const wrap = document.getElementById('spiral-wrap');
   if (!wrap) return;
 
-  const AMPLITUDE  = 70;    // max horizontal pixels of drift
-  const WAVELENGTH = 1600;  // px of scroll per full sine cycle
-  const TILT_MAX   = 0.4;   // max rotateZ degrees
+  // ---- Helix config ----
+  const WAVELENGTH = 2000;  // px of scroll per full 360° orbit around pillar
+  const ROT_Y_MAX  = 28;    // max degrees of rotation around Y axis
+  const TRANS_Z    = 120;   // max depth push (px) when turning — makes it 3D
+  const ROT_Z_MAX  = 1.8;   // max lean/tilt degrees (subtle)
+  const LERP       = 0.07;  // smoothness of motion
 
-  let smoothX   = 0;  // lerped spiralX
-  let smoothRot = 0;  // lerped rotateZ
-  let prevSY    = -1;
+  let sRotY  = 0, sTransZ = 0, sRotZ = 0;
+  let prevSY = -1;
 
   function tick() {
     requestAnimationFrame(tick);
@@ -2006,19 +2020,31 @@ const scrollProgress = document.getElementById('scrollProgress');
     const ind = document.getElementById('spiralIndicator');
     if (ind) ind.classList.toggle('visible', sy > 120);
 
-    if (Math.abs(sy - prevSY) < 0.1) return; // nothing changed
+    if (Math.abs(sy - prevSY) < 0.1) return;
     prevSY = sy;
 
-    // Spiral maths
-    const phase    = (sy / WAVELENGTH) * Math.PI * 2;
-    const targetX  = Math.sin(phase) * AMPLITUDE;
-    const targetRot = Math.cos(phase) * TILT_MAX;
+    // ---- Helix maths ----
+    // phase goes from 0 → 2π as you scroll one WAVELENGTH
+    const phase = (sy / WAVELENGTH) * Math.PI * 2;
 
-    // Smooth lerp so it doesn't snap
-    smoothX   += (targetX   - smoothX)   * 0.1;
-    smoothRot += (targetRot - smoothRot) * 0.1;
+    // rotateY: oscillates ±ROT_Y_MAX  — the "orbiting the pillar" rotation
+    const tRotY  = Math.sin(phase) * ROT_Y_MAX;
 
-    wrap.style.transform = `translateX(${smoothX.toFixed(2)}px) rotateZ(${smoothRot.toFixed(3)}deg)`;
+    // translateZ: pushes content back when it's turned sideways (sin²)
+    // At max rotation → deepest into the screen, at front → shallow
+    const tTransZ = -(Math.sin(phase) * Math.sin(phase)) * TRANS_Z;
+
+    // rotateZ: gentle lean that follows the helix curve
+    const tRotZ  = Math.cos(phase) * ROT_Z_MAX;
+
+    // ---- Lerp ----
+    sRotY   += (tRotY   - sRotY)   * LERP;
+    sTransZ += (tTransZ - sTransZ) * LERP;
+    sRotZ   += (tRotZ   - sRotZ)   * LERP;
+
+    // ---- Apply ----
+    wrap.style.transform =
+      `rotateY(${sRotY.toFixed(3)}deg) translateZ(${sTransZ.toFixed(2)}px) rotateZ(${sRotZ.toFixed(3)}deg)`;
   }
   tick();
 
