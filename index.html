@@ -118,8 +118,14 @@ body::before {
 }
 
 .nav-logo img {
-  height: 52px;
+  height: 72px;
   width: auto;
+  transition: filter 0.35s ease, transform 0.35s ease;
+}
+
+.nav-logo:hover img {
+  filter: drop-shadow(0 0 14px rgba(245,255,0,0.55));
+  transform: scale(1.05);
 }
 
 .nav-logo .dot {
@@ -1562,6 +1568,50 @@ body {
 .plans-roi p { color: var(--text-dim); font-size: 0.88rem; margin: 0; line-height: 1.6; }
 .plans-roi strong { color: var(--accent); }
 
+
+/* ============ LOGO INSTANCES ============ */
+
+/* Hero watermark — large semi-transparent logo floating in background */
+.logo-watermark {
+  position: absolute;
+  top: 50%;
+  right: -4%;
+  transform: translateY(-50%);
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+}
+.logo-watermark img {
+  height: 520px;
+  width: auto;
+  opacity: 0.04;
+  filter: grayscale(1) brightness(8);
+  animation: logoFloat 9s ease-in-out infinite;
+}
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0px)   rotate(-2deg); }
+  50%       { transform: translateY(-28px) rotate(2deg);  }
+}
+
+/* CTA final — prominent logo with yellow glow pulse */
+.cta-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 36px;
+}
+.cta-logo img {
+  height: 88px;
+  width: auto;
+  animation: ctaGlow 3s ease-in-out infinite;
+}
+@keyframes ctaGlow {
+  0%, 100% { filter: drop-shadow(0 0 0px  rgba(245,255,0,0.0)) brightness(1);   opacity: 0.85; }
+  50%       { filter: drop-shadow(0 0 24px rgba(245,255,0,0.7)) brightness(1.1); opacity: 1;    }
+}
+
+/* Footer logo */
+.footer-logo { height: 60px; width: auto; margin-bottom: 14px; display: block; }
+
 </style>
 </head>
 <body>
@@ -1610,6 +1660,9 @@ body {
 <section class="hero">
   <canvas id="hero-canvas"></canvas>
   <div class="hero-grid-lines"></div>
+  <div class="logo-watermark" aria-hidden="true">
+    <img src="logo.png" alt="">
+  </div>
   <div class="container">
     <div class="hero-tag">CDCsite — Aprilia, Lazio</div>
     <h1>
@@ -2138,6 +2191,9 @@ body {
 <section id="contatti" class="cta-final">
   <div class="wireframe-cube"></div>
   <div class="container">
+    <div class="cta-logo">
+      <img src="logo.png" alt="CDCsite">
+    </div>
     <h2>Il tuo sito,<br><span style="color: var(--accent);">pronto questa settimana.</span></h2>
     <p>Inizia oggi. In 48 ore hai già la bozza del tuo sito — senza pagare niente, senza firmare niente. Se non ti convince al 100%, non perdi un centesimo.</p>
     <div class="cta-buttons">
@@ -2157,7 +2213,7 @@ body {
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <img src="logo.png" alt="CDCsite" style="height:40px; width:auto; margin-bottom:12px; display:block;">
+        <img src="logo.png" alt="CDCsite" class="footer-logo">
         <p>Siti web professionali per piccole aziende. Da Aprilia (LT) a tutta Italia.</p>
       </div>
       <div class="footer-col">
