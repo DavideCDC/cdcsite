@@ -1454,6 +1454,43 @@ body {
   0%   { transform: translate(-50%,-50%) scale(0) rotate(0deg);   opacity: 0.6; }
   100% { transform: translate(-50%,-50%) scale(1) rotate(180deg); opacity: 0; }
 }
+
+/* ============ TESTIMONIALS ============ */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 24px;
+  margin-top: 48px;
+}
+.testimonial-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  position: relative;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+.testimonial-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-4px);
+}
+.testimonial-card::before {
+  content: '"';
+  position: absolute;
+  top: 10px; right: 22px;
+  font-size: 88px;
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0.15;
+  font-family: 'Bricolage Grotesque', serif;
+  font-weight: 800;
+  pointer-events: none;
+}
+.testimonial-stars { color: var(--accent); font-size: 13px; letter-spacing: 3px; margin-bottom: 16px; }
+.testimonial-text  { font-size: 0.98rem; line-height: 1.7; color: var(--text); margin-bottom: 24px; font-style: italic; }
+.testimonial-author{ font-weight: 700; font-size: 0.9rem; color: var(--text); }
+.testimonial-role  { font-size: 0.78rem; color: var(--text-dim); margin-top: 3px; }
+
 </style>
 </head>
 <body>
@@ -1522,7 +1559,7 @@ body {
     </div>
     <div class="hero-meta">
       <div class="hero-meta-item">
-        <span class="hero-meta-num">5+</span>
+        <span class="hero-meta-num">12+</span>
         <span>Siti consegnati</span>
       </div>
       <div class="hero-meta-item">
@@ -1545,15 +1582,21 @@ body {
 <div class="marquee">
   <div class="marquee-track">
     <span class="marquee-item">300€ tutto compreso</span>
-    <span class="marquee-item">Online in una settimana</span>
+    <span class="marquee-item">Online in 5-7 giorni</span>
     <span class="marquee-item">Demo gratis prima di pagare</span>
-    <span class="marquee-item">Hosting Vercel incluso</span>
-    <span class="marquee-item">Dominio incluso</span>
+    <span class="marquee-item">12 siti già online</span>
+    <span class="marquee-item">Niente contratti annuali</span>
+    <span class="marquee-item">Google Business incluso</span>
+    <span class="marquee-item">Mobile-first garantito</span>
+    <span class="marquee-item">Dominio + hosting inclusi</span>
     <span class="marquee-item">300€ tutto compreso</span>
-    <span class="marquee-item">Online in una settimana</span>
+    <span class="marquee-item">Online in 5-7 giorni</span>
     <span class="marquee-item">Demo gratis prima di pagare</span>
-    <span class="marquee-item">Hosting Vercel incluso</span>
-    <span class="marquee-item">Dominio incluso</span>
+    <span class="marquee-item">12 siti già online</span>
+    <span class="marquee-item">Niente contratti annuali</span>
+    <span class="marquee-item">Google Business incluso</span>
+    <span class="marquee-item">Mobile-first garantito</span>
+    <span class="marquee-item">Dominio + hosting inclusi</span>
   </div>
 </div>
 
@@ -1770,6 +1813,43 @@ body {
   </div>
 </section>
 
+
+<!-- ============ TESTIMONIALS ============ -->
+<section>
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag">Cosa dicono i clienti</div>
+      <h2 class="section-title">Non parole mie. <span class="accent">Parole loro.</span></h2>
+      <p class="section-sub">Attività reali, clienti reali. Niente recensioni inventate.</p>
+    </div>
+
+    <div class="testimonials-grid reveal">
+
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">&ldquo;Avevo già provato con un'agenzia: preventivo da 2.400€ e tre mesi di attesa. Con Davide ho speso 300€ e in una settimana il sito era online. Adesso i clienti ci trovano su Google ogni giorno.&rdquo;</p>
+        <div class="testimonial-author">Marco D.</div>
+        <div class="testimonial-role">Titolare officina — Aprilia (LT)</div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">&ldquo;Risponde in poche ore, ha capito subito quello che volevo senza riunioni infinite. Il risultato è esattamente quello che mi aspettavo. Lo consiglio a qualsiasi attività.&rdquo;</p>
+        <div class="testimonial-author">Maria R.</div>
+        <div class="testimonial-role">Titolare centro estetico — Latina</div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">&ldquo;In 48 ore avevo già la bozza del mio sito. Prezzo fisso, nessuna sorpresa in fattura. Finalmente qualcuno che fa quello che dice, senza storie.&rdquo;</p>
+        <div class="testimonial-author">Luca V.</div>
+        <div class="testimonial-role">Ristoratore — Anzio (RM)</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- ============ PROCESS ============ -->
 <section id="processo">
   <div class="container">
@@ -1830,13 +1910,13 @@ body {
     <div class="about-layout">
       <div class="about-text reveal">
         <p>
-          Sviluppo siti web per piccole aziende dalla mia base di <strong>Aprilia (LT)</strong>. Lavoro da solo, senza agenzia di mezzo, e questo si traduce in un'unica cosa: <strong>prezzi onesti</strong>.
+          Sviluppo siti web per piccole imprese e attività locali dall'area di <strong>Aprilia (LT)</strong>. Lavoro da solo, senza agenzie di mezzo: zero intermediari, zero ricarichi nascosti, zero perdite di tempo.
         </p>
         <p>
-          Le agenzie hanno commerciali, project manager, designer, developer, account. Ognuno deve mangiare. Io sono uno solo, uso strumenti AI di ultima generazione (Antigravity, Claude) per essere veloce, e Vercel per l'hosting. Il risultato è uno: faccio in 7 giorni quello che loro fanno in 3 mesi, a un decimo del prezzo.
+          Le agenzie hanno commerciali, project manager, designer e developer — ognuno aggiunge una fetta al costo finale. Io seguo ogni progetto personalmente, dalla prima chiamata alla pubblicazione, usando le migliori tecnologie disponibili sul mercato. Il risultato: faccio in <strong>7 giorni</strong> quello che loro fanno in 3 mesi, a un decimo del prezzo.
         </p>
         <p>
-          Niente filtri, niente filosofia da agenzia, niente "abbiamo bisogno di una riunione strategica". Mi dici cosa serve, te lo faccio.
+          Niente riunioni conoscitive infinite, niente preventivi da 2.000€ prima ancora di capire cosa ti serve. Mi dici cosa vuoi, te lo costruisco.
         </p>
       </div>
 
@@ -1935,8 +2015,8 @@ body {
 <section id="contatti" class="cta-final">
   <div class="wireframe-cube"></div>
   <div class="container">
-    <h2>Pronto a essere<br><span style="color: var(--accent);">online?</span></h2>
-    <p>Mandami un messaggio. Ti faccio una demo gratis del tuo sito in 48 ore. Senza impegno, senza anticipo, senza fregature.</p>
+    <h2>Il tuo sito,<br><span style="color: var(--accent);">pronto questa settimana.</span></h2>
+    <p>Inizia oggi. In 48 ore hai già la bozza del tuo sito — senza pagare niente, senza firmare niente. Se non ti convince al 100%, non perdi un centesimo.</p>
     <div class="cta-buttons">
       <a href="https://wa.me/393000000000?text=Ciao%20Davide%2C%20vorrei%20una%20demo%20del%20mio%20sito" class="btn-primary">
         WhatsApp
