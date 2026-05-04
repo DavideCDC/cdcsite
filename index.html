@@ -576,19 +576,58 @@ section { padding: 120px 0; position: relative; z-index: 2; }
   padding: 40px 32px;
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  transition: background 0.2s;
+  transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+  position: relative;
 }
+
+.feature::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0;
+  background: var(--accent);
+  transition: width 0.25s ease;
+}
+
+.feature:hover::before { width: 3px; }
 
 .feature:hover {
   background: var(--surface);
+  transform: translateX(4px);
+}
+
+/* Featured card (highlighted) */
+.feature.featured {
+  background: linear-gradient(135deg, rgba(245,255,0,0.05) 0%, var(--surface) 70%);
+  border-color: var(--accent);
+  position: relative;
+}
+
+.feature.featured::before { width: 3px; }
+
+.feature.featured::after {
+  content: '★ Incluso nel 1° mese';
+  position: absolute;
+  top: 14px; right: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--accent);
+  padding: 3px 8px;
+  border-radius: 3px;
 }
 
 .feature-num {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 700;
   color: var(--accent);
-  margin-bottom: 16px;
+  margin-bottom: 18px;
   display: block;
+  letter-spacing: 0.1em;
 }
 
 .feature h4 {
@@ -1818,7 +1857,7 @@ body {
         <h4>SEO base ottimizzato</h4>
         <p>Meta tag, sitemap, schema.org, immagini ottimizzate. Tutto quello che serve per essere indicizzato.</p>
       </div>
-      <div class="feature">
+      <div class="feature featured">
         <span class="feature-num">06</span>
         <h4>Modifiche illimitate<br>per 30 giorni</h4>
         <p>Vuoi cambiare colori, foto, testi? Per il primo mese cambi quello che vuoi senza costi extra.</p>
