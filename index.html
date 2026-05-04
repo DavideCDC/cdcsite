@@ -1317,7 +1317,7 @@ body {
 #spiral-wrap > section,
 #spiral-wrap > .marquee {
   transform-style: preserve-3d;
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
   backface-visibility: hidden;
 }
 
@@ -1981,7 +1981,6 @@ window.addEventListener('scroll', () => {
           rotateZ:  side * 2,
           scale:    0.55,
           opacity:  0,
-          filter:   'blur(18px)',
         },
         {
           z:        0,
@@ -1990,7 +1989,6 @@ window.addEventListener('scroll', () => {
           rotateZ:  0,
           scale:    1,
           opacity:  1,
-          filter:   'blur(0px)',
           ease:     'power2.out',
           scrollTrigger: {
             trigger:   section,
@@ -2013,7 +2011,6 @@ window.addEventListener('scroll', () => {
           rotateX: 0,
           scale:   1,
           opacity: 1,
-          filter:  'blur(0px)',
         },
         {
           z:       550,
@@ -2021,7 +2018,6 @@ window.addEventListener('scroll', () => {
           rotateX: 12,
           scale:   1.1,
           opacity: 0,
-          filter:  'blur(10px)',
           ease:    'power1.in',
           scrollTrigger: {
             trigger: section,
