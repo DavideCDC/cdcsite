@@ -1302,11 +1302,24 @@ section:hover::after { opacity: 1; }
   animation-direction: reverse;
 }
 
-/* ============ SPIRAL SCROLL ============ */
+/* ============ SPIRAL SCROLL — TRUE PATH ============ */
+/*
+  The page content sits in a fixed wrapper that we move
+  along a spiral (sinusoidal) path as the user scrolls.
+  Native scroll is disabled; we handle it ourselves.
+*/
+html, body {
+  overflow: hidden !important;
+  height: 100% !important;
+}
+
 #spiral-wrap {
-  transform-style: preserve-3d;
-  transform-origin: center top;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   will-change: transform;
+  /* transform is set by JS */
 }
 
 /* Each section gets a spiral-item class for individual animation */
@@ -1962,130 +1975,139 @@ section:hover::after { opacity: 1; }
 // ============ GSAP SETUP ============
 gsap.registerPlugin(ScrollTrigger);
 
-// ============ SCROLL PROGRESS BAR ============
-const scrollProgress = document.getElementById('scrollProgress');
-window.addEventListener('scroll', () => {
-  const winHeight = document.documentElement.scrollHeight - window.innerHeight;
-  const scrolled = (window.scrollY / winHeight) * 100;
-  scrollProgress.style.width = scrolled + '%';
-}, { passive: true });
+// Progress bar & spiral indicator are updated inside the spiral scroll rAF loop below.
 
-// ============ SPIRAL SCROLL INDICATOR ============
-const spiralIndicator = document.getElementById('spiralIndicator');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 120) {
-    spiralIndicator.classList.add('visible');
-  } else {
-    spiralIndicator.classList.remove('visible');
+// ============================================================
+// TRUE SPIRAL SCROLL ENGINE
+// ============================================================
+// How it works:
+//   - Native scroll is blocked (overflow:hidden on html/body)
+//   - We intercept wheel + touch events and accumulate a
+//     virtual "scrollY" value (targetScrollY)
+//   - Each rAF frame, currentScrollY lerps toward targetScrollY
+//   - The content wrapper (#spiral-wrap) is translated by:
+//       translateY(-currentScrollY)   — vertical movement
+//       translateX(spiralX)           — horizontal spiral component
+//       rotateZ(tiltAngle)            — subtle tilt along the path
+//   - spiralX = sin(currentScrollY / WAVELENGTH) * AMPLITUDE
+//     → this creates the sine-wave (spiral) horizontal movement
+//     → scrolling down first goes right, then left, alternating
+//     → scrolling up reverses exactly
+// ============================================================
+
+(function initTrueSpiralScroll() {
+
+  const wrap = document.getElementById('spiral-wrap');
+  if (!wrap) return;
+
+  // ---- Config ----
+  const LERP_SPEED   = 0.09;   // smoothness (0=frozen, 1=instant)
+  const AMPLITUDE    = 80;     // max horizontal px of spiral
+  const WAVELENGTH   = 1400;   // px per full left-right-left cycle
+  const TILT_MAX     = 0.5;    // max degrees of rotateZ tilt
+  const SCROLL_SPEED = 1.0;    // wheel multiplier
+
+  let targetY  = 0;   // where we want to scroll
+  let currentY = 0;   // where we actually are (lerped)
+  let maxScroll = 0;
+
+  function getMaxScroll() {
+    return wrap.scrollHeight - window.innerHeight;
   }
-}, { passive: true });
 
-// ============ SPIRAL SCROLL ENGINE ============
-(function initSpiralScroll() {
-  // We animate each direct child section/div of #spiral-wrap
-  // along a spiral path: translateX oscillates like a sine wave,
-  // while rotateZ applies a gentle twist — together producing
-  // a barrel/spiral sensation.
+  // Recalculate maxScroll on resize / font-load
+  function recalc() {
+    maxScroll = getMaxScroll();
+  }
+  recalc();
+  window.addEventListener('resize', recalc);
+  document.fonts.ready.then(recalc);
 
-  const sections = document.querySelectorAll('#spiral-wrap > section, #spiral-wrap > .marquee');
-  const TOTAL = sections.length;
+  // ---- Input: Mouse Wheel ----
+  window.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    targetY = Math.max(0, Math.min(maxScroll, targetY + e.deltaY * SCROLL_SPEED));
+  }, { passive: false });
 
-  sections.forEach((section, i) => {
-    // Skip the hero — it's the entry point, no incoming spiral
-    if (i === 0) return;
+  // ---- Input: Touch ----
+  let touchStartY = 0;
+  window.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  window.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    const dy = touchStartY - e.touches[0].clientY;
+    touchStartY = e.touches[0].clientY;
+    targetY = Math.max(0, Math.min(maxScroll, targetY + dy * SCROLL_SPEED));
+  }, { passive: false });
 
-    // Spiral math:
-    // Each section enters from alternating sides + slight rotation
-    const side = i % 2 === 0 ? 1 : -1;
-    const spiralRadius = 120 + i * 18; // pixels of horizontal offset
-    const angle = i * 22;              // degrees of initial twist
-    const depth = 80 + i * 12;        // z-depth starting point
+  // ---- Input: Keyboard arrows / pageup / pagedown ----
+  window.addEventListener('keydown', (e) => {
+    const step = window.innerHeight * 0.85;
+    if (e.key === 'ArrowDown' || e.key === 'PageDown')  targetY = Math.min(maxScroll, targetY + step * 0.5);
+    if (e.key === 'ArrowUp'   || e.key === 'PageUp')    targetY = Math.max(0,         targetY - step * 0.5);
+    if (e.key === 'End')                                 targetY = maxScroll;
+    if (e.key === 'Home')                                targetY = 0;
+  });
 
-    gsap.fromTo(section,
-      {
-        opacity: 0,
-        x: spiralRadius * side,
-        y: 60,
-        z: -depth,
-        rotateZ: angle * side * 0.08,
-        rotateY: -18 * side,
-        scale: 0.88,
-        transformPerspective: 1200,
-        transformOrigin: 'center center',
-      },
-      {
-        opacity: 1,
-        x: 0,
-        y: 0,
-        z: 0,
-        rotateZ: 0,
-        rotateY: 0,
-        scale: 1,
-        duration: 1.4,
-        ease: 'expo.out',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 90%',
-          end: 'top 30%',
-          scrub: 0.8,
-          toggleActions: 'play none none reverse',
-        }
-      }
-    );
-
-    // Exit spiral: sections gently twist out as we scroll past them
-    gsap.to(section, {
-      x: -spiralRadius * side * 0.4,
-      y: -30,
-      z: -40,
-      rotateZ: -angle * side * 0.04,
-      opacity: 0.6,
-      scale: 0.97,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: section,
-        start: 'bottom 60%',
-        end: 'bottom top',
-        scrub: 1.2,
+  // ---- Anchor links: jump to section ----
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      if (href === '#') { targetY = 0; e.preventDefault(); return; }
+      const target = wrap.querySelector(href);
+      if (target) {
+        e.preventDefault();
+        const offsetTop = target.getBoundingClientRect().top - wrap.getBoundingClientRect().top;
+        targetY = Math.max(0, Math.min(maxScroll, offsetTop - 80));
       }
     });
   });
 
-  // ============ GLOBAL BARREL ROLL EFFECT ============
-  // The entire #spiral-wrap subtly rotates as we scroll,
-  // as if the page is a roll of film being unwound.
-  gsap.to('#spiral-wrap', {
-    ease: 'none',
-    scrollTrigger: {
-      trigger: 'body',
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: 1,
-      onUpdate: (self) => {
-        // Oscillating x-shift simulates spiral path on the container
-        const progress = self.progress;
-        const spiralX = Math.sin(progress * Math.PI * 3) * 14;
-        const spiralRot = Math.sin(progress * Math.PI * 4) * 0.25;
-        gsap.set('#spiral-wrap', {
-          x: spiralX,
-          rotateZ: spiralRot,
-        });
-      }
-    }
-  });
+  // ---- Sync ScrollTrigger & progress bar with virtual scrollY ----
+  function syncScrollTrigger(y) {
+    // Feed our virtual scroll position to GSAP ScrollTrigger
+    ScrollTrigger.scroll(y);
+    // Progress bar
+    const bar = document.getElementById('scrollProgress');
+    if (bar) bar.style.width = ((y / (maxScroll || 1)) * 100) + '%';
+    // Spiral indicator
+    const ind = document.getElementById('spiralIndicator');
+    if (ind) ind.classList.toggle('visible', y > 120);
+  }
+
+  // ---- rAF loop ----
+  let prevY = -1;
+  function tick() {
+    requestAnimationFrame(tick);
+
+    // Lerp toward target
+    currentY += (targetY - currentY) * LERP_SPEED;
+    if (Math.abs(currentY - prevY) < 0.05) return; // skip if no change
+    prevY = currentY;
+
+    // Spiral maths
+    const phase   = currentY / WAVELENGTH * Math.PI * 2;
+    const spiralX = Math.sin(phase) * AMPLITUDE;
+    const tiltDeg = Math.cos(phase) * TILT_MAX;  // gentle rotation with the curve
+
+    // Apply transform to content wrapper
+    wrap.style.transform =
+      `translateY(${-currentY}px) translateX(${spiralX}px) rotateZ(${tiltDeg}deg)`;
+
+    // Sync GSAP ScrollTrigger
+    syncScrollTrigger(currentY);
+
+    // Vortex rings: speed up with scroll velocity
+    const velocity = Math.abs(targetY - currentY);
+    const ringSpeed = Math.max(8 - velocity * 0.04, 2);
+    document.querySelectorAll('.vortex-ring').forEach(r => {
+      r.style.animationDuration = ringSpeed + 's';
+    });
+  }
+  tick();
 
 })();
-
-// ============ VORTEX INTENSITY ON SCROLL ============
-// Intensify vortex ring animation speed based on scroll velocity
-let lastScroll = 0;
-window.addEventListener('scroll', () => {
-  const velocity = Math.abs(window.scrollY - lastScroll);
-  lastScroll = window.scrollY;
-  const rings = document.querySelectorAll('.vortex-ring');
-  const speed = Math.max(8 - velocity * 0.1, 1.5); // min 1.5s duration
-  rings.forEach(r => r.style.animationDuration = speed + 's');
-}, { passive: true });
 
 // ============ CUSTOM CURSOR ============
 const dot = document.getElementById('cursorDot');
