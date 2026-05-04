@@ -16,12 +16,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-<!-- GSAP + ScrollTrigger (100% free from May 2025) -->
+<!-- GSAP + ScrollTrigger -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <!-- Three.js for WebGL hero -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
-<!-- Native scroll, no Lenis -->
+<!-- Lenis smooth scroll -->
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
 
 <style>
 :root {
@@ -1302,25 +1303,23 @@ section:hover::after { opacity: 1; }
   animation-direction: reverse;
 }
 
-/* ============ 3D HELIX SCROLL — PILLAR EFFECT ============ */
+/* ============ CORN REVOLUTION STYLE — 3D FLYTHROUGH ============ */
 /*
-  Imagine the page is wrapped around an invisible vertical
-  pillar. As you scroll down, the view rotates around that
-  pillar (rotateY), combined with perspective depth — giving
-  a true 3D helix / spiral staircase sensation.
-  Native scroll is 100% intact. We only add transforms.
+  Each section lives in a 3D space with perspective.
+  Sections fly toward the viewer from depth (like a camera
+  moving through a 3D environment), then fly past.
+  Powered by Lenis (smooth scroll) + GSAP ScrollTrigger.
 */
 body {
-  perspective: 1200px;
-  perspective-origin: 50% 35%;
   overflow-x: hidden;
 }
 
-#spiral-wrap {
+/* 3D stage: each section participates in 3D space */
+#spiral-wrap > section,
+#spiral-wrap > .marquee {
   transform-style: preserve-3d;
-  will-change: transform;
-  transform-origin: 50% 0;  /* rotate around top-center = pillar top */
-  backface-visibility: visible;
+  will-change: transform, opacity, filter;
+  backface-visibility: hidden;
 }
 
 /* Each section gets a spiral-item class for individual animation */
@@ -1980,84 +1979,136 @@ gsap.registerPlugin(ScrollTrigger);
 const scrollProgress = document.getElementById('scrollProgress');
 
 // ============================================================
-// 3D HELIX SCROLL — PILLAR EFFECT
+// LENIS SMOOTH SCROLL SETUP
+// Lenis replaces the default scroll with a buttery-smooth,
+// momentum-based scroll — essential for cinematic 3D effects.
 // ============================================================
-// The page appears to be wrapped around an invisible vertical
-// pillar. As scrollY increases:
-//   rotateY  = sin(phase) * MAX_ROT_Y  → rotates around Y axis (depth)
-//   translateZ = sin²(phase) * -TZ     → pushes back as it turns
-//   rotateZ  = cos(phase) * TILT       → slight lean along the helix
-//
-// With CSS perspective on body, this makes the content feel
-// like it's curving in 3D space around an invisible column.
-// Scrolling down = descending the helix. Scrolling up = ascending.
-// ============================================================
-(function initHelixScroll() {
+let lenis;
+try {
+  lenis = new Lenis({
+    duration: 1.6,
+    easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
+    wheelMultiplier: 1.0,
+    touchMultiplier: 2.0,
+  });
+  // Feed Lenis into GSAP ticker
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(time => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
 
-  const wrap = document.getElementById('spiral-wrap');
-  if (!wrap) return;
-
-  // ---- Helix config ----
-  const WAVELENGTH = 2000;  // px of scroll per full 360° orbit around pillar
-  const ROT_Y_MAX  = 28;    // max degrees of rotation around Y axis
-  const TRANS_Z    = 120;   // max depth push (px) when turning — makes it 3D
-  const ROT_Z_MAX  = 1.8;   // max lean/tilt degrees (subtle)
-  const LERP       = 0.07;  // smoothness of motion
-
-  let sRotY  = 0, sTransZ = 0, sRotZ = 0;
-  let prevSY = -1;
-
-  function tick() {
-    requestAnimationFrame(tick);
-
-    const sy = window.scrollY;
-
-    // Progress bar
-    const maxS = document.documentElement.scrollHeight - window.innerHeight;
-    if (scrollProgress) scrollProgress.style.width = ((sy / (maxS || 1)) * 100) + '%';
-
-    // Spiral indicator
+  // Progress bar & spiral indicator via Lenis scroll event
+  lenis.on('scroll', ({ scroll, limit }) => {
+    if (scrollProgress) scrollProgress.style.width = ((scroll / limit) * 100) + '%';
     const ind = document.getElementById('spiralIndicator');
-    if (ind) ind.classList.toggle('visible', sy > 120);
-
-    if (Math.abs(sy - prevSY) < 0.1) return;
-    prevSY = sy;
-
-    // ---- Helix maths ----
-    // phase goes from 0 → 2π as you scroll one WAVELENGTH
-    const phase = (sy / WAVELENGTH) * Math.PI * 2;
-
-    // rotateY: oscillates ±ROT_Y_MAX  — the "orbiting the pillar" rotation
-    const tRotY  = Math.sin(phase) * ROT_Y_MAX;
-
-    // translateZ: pushes content back when it's turned sideways (sin²)
-    // At max rotation → deepest into the screen, at front → shallow
-    const tTransZ = -(Math.sin(phase) * Math.sin(phase)) * TRANS_Z;
-
-    // rotateZ: gentle lean that follows the helix curve
-    const tRotZ  = Math.cos(phase) * ROT_Z_MAX;
-
-    // ---- Lerp ----
-    sRotY   += (tRotY   - sRotY)   * LERP;
-    sTransZ += (tTransZ - sTransZ) * LERP;
-    sRotZ   += (tRotZ   - sRotZ)   * LERP;
-
-    // ---- Apply ----
-    wrap.style.transform =
-      `rotateY(${sRotY.toFixed(3)}deg) translateZ(${sTransZ.toFixed(2)}px) rotateZ(${sRotZ.toFixed(3)}deg)`;
-  }
-  tick();
-
-  // Vortex ring speed on scroll
-  let lastSY2 = 0;
+    if (ind) ind.classList.toggle('visible', scroll > 120);
+  });
+} catch(e) {
+  // Fallback if Lenis not loaded
+  console.warn('Lenis not available, using native scroll');
   window.addEventListener('scroll', () => {
-    const vel = Math.abs(window.scrollY - lastSY2);
-    lastSY2 = window.scrollY;
-    const speed = Math.max(8 - vel * 0.05, 2);
-    document.querySelectorAll('.vortex-ring').forEach(r => {
-      r.style.animationDuration = speed + 's';
-    });
+    const maxS = document.documentElement.scrollHeight - window.innerHeight;
+    if (scrollProgress) scrollProgress.style.width = ((window.scrollY / maxS) * 100) + '%';
   }, { passive: true });
+}
+
+// ============================================================
+// CORN REVOLUTION STYLE — 3D FLYTHROUGH PER SECTION
+// ============================================================
+// Each section lives at a different point in 3D space.
+// As you scroll:
+//   ENTRY:  section flies from far depth (translateZ -1800px)
+//           at an angle (rotateY ±35°) toward the viewer.
+//           Arrives centered & flat (z=0, rotY=0).
+//   EXIT:   section flies PAST the viewer (translateZ +500px)
+//           slightly angled the other way, fading + blurring.
+// Combined with Lenis smooth scroll → butter-smooth 3D camera
+// feeling identical to the Corn Revolution experience.
+// ============================================================
+(function initFlythroughScroll() {
+
+  const sections = gsap.utils.toArray('#spiral-wrap > section, #spiral-wrap > .marquee');
+
+  sections.forEach((section, i) => {
+    // Alternate left/right approach angle — creates the spiral path
+    const side  = i % 2 === 0 ? 1 : -1;
+    // Hero (i=0) gets a gentler treatment — already has its own intro anim
+    const isHero = i === 0;
+
+    if (!isHero) {
+      // ---- ENTRY: section emerges from deep in the scene ----
+      gsap.fromTo(section,
+        {
+          transformPerspective: 1400,
+          transformOrigin: '50% 50% -800px',
+          z:        -1800,
+          rotateY:  side * 38,
+          rotateX:  -10,
+          rotateZ:  side * 2,
+          scale:    0.55,
+          opacity:  0,
+          filter:   'blur(18px)',
+        },
+        {
+          z:        0,
+          rotateY:  0,
+          rotateX:  0,
+          rotateZ:  0,
+          scale:    1,
+          opacity:  1,
+          filter:   'blur(0px)',
+          ease:     'power2.out',
+          scrollTrigger: {
+            trigger:   section,
+            start:     'top 100%',
+            end:       'top 8%',
+            scrub:     1.4,
+          }
+        }
+      );
+    }
+
+    // ---- EXIT: section flies PAST the viewer ----
+    // (skipped for the last section — footer/CTA stays)
+    if (i < sections.length - 1) {
+      gsap.fromTo(section,
+        {
+          transformPerspective: 1400,
+          z:       0,
+          rotateY: 0,
+          rotateX: 0,
+          scale:   1,
+          opacity: 1,
+          filter:  'blur(0px)',
+        },
+        {
+          z:       550,
+          rotateY: -side * 22,
+          rotateX: 12,
+          scale:   1.1,
+          opacity: 0,
+          filter:  'blur(10px)',
+          ease:    'power1.in',
+          scrollTrigger: {
+            trigger: section,
+            start:   'bottom 65%',
+            end:     'bottom -5%',
+            scrub:   1.1,
+          }
+        }
+      );
+    }
+  });
+
+  // Vortex rings speed up on fast scroll
+  if (lenis) {
+    lenis.on('scroll', ({ velocity }) => {
+      const speed = Math.max(8 - Math.abs(velocity) * 0.3, 1.5);
+      document.querySelectorAll('.vortex-ring').forEach(r => {
+        r.style.animationDuration = speed + 's';
+      });
+    });
+  }
 
 })();
 
