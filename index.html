@@ -21,10 +21,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <!-- Three.js for WebGL hero -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+<!-- CDC Effects -->
+<link rel="stylesheet" href="effect/effect/cdc-effects.css">
 
 
 <style>
 :root {
+  /* Allinea CDC Effects al colore accent del sito */
+  --cdc-accent: #F5FF00;
+  --cdc-ink-dark: #0A0A0A;
+  --cdc-ink-light: #FAFAF7;
   --bg: #0A0A0A;
   --bg-soft: #141414;
   --surface: #1A1A1A;
@@ -3402,6 +3408,9 @@ body {
 </head>
 <body>
 
+<!-- CDC Loader (primo elemento — copre tutto mentre la pagina carica) -->
+<div data-cdc="loader" data-duration="2000"></div>
+
 <!-- Vortex decorative rings -->
 <div class="vortex-bg">
   <div class="vortex-ring"></div>
@@ -3431,13 +3440,13 @@ body {
     <img src="logo.png" alt="CDCsite">
   </a>
   <div class="nav-links">
-    <a href="#lavori">Lavori</a>
-    <a href="#prezzi">Prezzi</a>
-    <a href="#abbonamenti">Piani</a>
-    <a href="#processo">Come funziona</a>
-    <a href="#chi-sono">Chi sono</a>
+    <a href="#lavori" data-cdc-trans="LAVORI">Lavori</a>
+    <a href="#prezzi" data-cdc-trans="PREZZI">Prezzi</a>
+    <a href="#abbonamenti" data-cdc-trans="PIANI">Piani</a>
+    <a href="#processo" data-cdc-trans="PROCESSO">Come funziona</a>
+    <a href="#chi-sono" data-cdc-trans="CHI SONO">Chi sono</a>
   </div>
-  <a href="#contatti" class="nav-cta">Demo gratis →</a>
+  <a href="#contatti" class="nav-cta" data-cdc-trans="DEMO">Demo gratis →</a>
 </nav>
 
 <div id="spiral-wrap">
@@ -3510,6 +3519,9 @@ body {
     <span class="marquee-item">Dominio + hosting inclusi</span>
   </div>
 </div>
+
+<!-- CDC Divider -->
+<div data-cdc="divider"></div>
 
 <!-- ============ COMPARISON ============ -->
 <section class="compare">
@@ -3703,6 +3715,9 @@ body {
 </section>
 
 
+<!-- CDC Divider -->
+<div data-cdc="divider"></div>
+
 <!-- ============ PORTFOLIO ============ -->
 <section id="lavori">
   <div class="container">
@@ -3878,6 +3893,9 @@ body {
     </div>
   </div>
 </section>
+
+<!-- CDC Divider -->
+<div data-cdc="divider"></div>
 
 <!-- ============ ABOUT ============ -->
 <section id="chi-sono" class="about">
@@ -4212,7 +4230,7 @@ if (dot && ring) {
 }
 
 // ============ HERO INTRO ============
-const heroTl = gsap.timeline({ delay: 0.1 });
+const heroTl = gsap.timeline({ delay: 2.4 }); // attende fine CDC loader (~2s + 0.4s fade-out)
 heroTl
   .from('.hero-tag', { y: 16, duration: 0.4, ease: 'power3.out' })
   .from('.hero h1', { y: 40, duration: 0.65, ease: 'expo.out' }, '-=0.1')
@@ -4673,6 +4691,9 @@ function toggleFaq(el) {
 })();
 
 </script>
+
+<!-- CDC Effects JS (auto-init loader, dividers, transizioni, reveal) -->
+<script src="effect/effect/cdc-effects.js" defer></script>
 
 </body>
 </html>

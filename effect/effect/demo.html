@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it" data-cdc-cursor>
+<head>
+<meta charset="utf-8"/>
+<title>CDC Effects — Demo & Test</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;900&family=Archivo+Narrow:wght@400;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="cdc-effects.css">
+<style>
+  body{margin:0;background:#0a0a0a;color:#f4f4ef;font-family:var(--cdc-mono)}
+  section{position:relative;min-height:100vh;padding:80px 28px;display:flex;flex-direction:column;justify-content:center}
+  .nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;padding:18px 28px;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;mix-blend-mode:difference}
+  .nav a{color:inherit;text-decoration:none;margin-left:24px}
+  h1.hero{font-family:var(--cdc-display);font-weight:900;font-size:clamp(64px,11vw,168px);line-height:0.85;letter-spacing:-0.045em;margin:0}
+  h2{font-family:var(--cdc-display);font-weight:900;font-size:clamp(48px,7vw,96px);letter-spacing:-0.04em;line-height:0.9;margin:0 0 32px}
+  .stroke{-webkit-text-stroke:2px #f4f4ef;-webkit-text-fill-color:transparent;color:transparent}
+  .yblock{display:inline-block;width:0.55em;height:0.85em;background:var(--cdc-accent);vertical-align:-0.05em}
+</style>
+</head>
+<body>
+
+<!-- Loader (rimosso a fine animazione) -->
+<div data-cdc="loader" data-duration="2000"></div>
+
+<!-- Nav: i link con data-cdc-trans triggherano la transizione slice -->
+<nav class="nav">
+  <span>● CDCSITE</span>
+  <span>
+    <a href="#hero" data-cdc-trans="HOME">Home</a>
+    <a href="#servizi" data-cdc-trans="SERVIZI">Servizi</a>
+    <a href="#lavori" data-cdc-trans="LAVORI">Lavori</a>
+  </span>
+</nav>
+
+<!-- HERO con sfondo grid + logo animato -->
+<section id="hero">
+  <div data-cdc="bg-grid" style="opacity:0.7"></div>
+  <div style="position:relative;z-index:2;max-width:1100px">
+    <div style="font-size:11px;letter-spacing:0.18em;opacity:0.6;margin-bottom:18px">CDC · WEB · DEV · DESIGN</div>
+    <h1 class="hero"><span class="stroke">Costruiamo</span><br>siti per <span class="stroke">ditte</span><span class="yblock"></span></h1>
+    <div style="margin-top:32px;font-size:32px;font-family:var(--cdc-display);font-weight:900">
+      <span data-cdc="logo" data-text="CDCsite" data-loop="true" style="font-size:64px"></span>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE strip -->
+<div data-cdc="marquee" style="border-top:1px solid rgba(244,244,239,0.18);border-bottom:1px solid rgba(244,244,239,0.18)"></div>
+
+<!-- SERVIZI -->
+<section id="servizi">
+  <h2 class="cdc-reveal">Quello che <span class="stroke">facciamo</span>.</h2>
+  <p class="cdc-reveal">Le card con classe <code>cdc-hover</code> reagiscono col cursore custom.</p>
+</section>
+
+<!-- DIVIDER -->
+<div data-cdc="divider"></div>
+
+<!-- LAVORI -->
+<section id="lavori">
+  <h2 class="cdc-reveal"><span class="stroke">Progetti</span> recenti.</h2>
+</section>
+
+<script src="cdc-effects.js" defer></script>
+</body>
+</html>
