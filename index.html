@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" data-cdc-cursor>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,9 +33,9 @@
   --cdc-ink-light: #FAFAF7;
 }
 
-/* Fix CDC logo: cdc-effects.css sets color:transparent che rende text-stroke invisibile */
+/* Fix CDC logo: stroke bianco, fill trasparente, blocco giallo via --cdc-accent */
 .cdc-logo__text {
-  color: var(--accent) !important;
+  color: var(--text) !important; /* bianco #FAFAF7 — usato da -webkit-text-stroke */
 }
 .cdc-logo__text-inner {
   -webkit-text-fill-color: transparent !important;
@@ -138,7 +138,7 @@ body::before {
 }
 
 .nav-logo img {
-  height: 48px;
+  height: 72px;
   width: auto;
   transition: filter 0.35s ease, transform 0.35s ease;
 }
@@ -1222,28 +1222,6 @@ footer {
   gap: 16px;
 }
 
-/* ============ CUSTOM CURSOR ============ */
-.cursor-dot {
-  width: 6px; height: 6px;
-  background: var(--accent);
-  border-radius: 50%;
-  position: fixed; top: 0; left: 0;
-  pointer-events: none; z-index: 9999;
-  transform: translate(-50%,-50%);
-}
-.cursor-ring {
-  width: 34px; height: 34px;
-  border: 1.5px solid rgba(245,255,0,.4);
-  border-radius: 50%;
-  position: fixed; top: 0; left: 0;
-  pointer-events: none; z-index: 9998;
-  transform: translate(-50%,-50%);
-  transition: width .4s cubic-bezier(.16,1,.3,1), height .4s cubic-bezier(.16,1,.3,1), border-color .3s, border-radius .3s, background .3s;
-}
-.cursor-ring.hovering { width: 54px; height: 54px; border-color: var(--accent); border-radius: 8px; }
-.cursor-ring.clicking { width: 18px; height: 18px; background: rgba(245,255,0,.2); }
-@media (pointer: coarse) { .cursor-dot, .cursor-ring { display: none; } }
-
 /* ============ SPLIT TEXT ============ */
 .split-line { overflow: hidden; display: block; }
 .split-line .line-inner {
@@ -1386,8 +1364,6 @@ section:hover::after { opacity: 1; }
   .logo-watermark,
   .spiral-indicator,
   .wireframe-cube,
-  .cursor-dot,
-  .cursor-ring,
   .scroll-progress,
   .price-monument-bg {
     display: none !important;
@@ -1441,7 +1417,7 @@ section:hover::after { opacity: 1; }
 
   /* ---- Navbar ---- */
   .nav { padding: 0 16px; height: 60px; }
-  .nav-logo img { height: 36px; }
+  .nav-logo img { height: 52px; }
   .nav-links { display: none; }
   .nav-cta { padding: 10px 14px; font-size: 12px; }
 
@@ -1690,7 +1666,7 @@ body::before {
 }
 
 .nav-logo img {
-  height: 48px;
+  height: 72px;
   width: auto;
   transition: filter 0.35s ease, transform 0.35s ease;
 }
@@ -2774,28 +2750,6 @@ footer {
   gap: 16px;
 }
 
-/* ============ CUSTOM CURSOR ============ */
-.cursor-dot {
-  width: 6px; height: 6px;
-  background: var(--accent);
-  border-radius: 50%;
-  position: fixed; top: 0; left: 0;
-  pointer-events: none; z-index: 9999;
-  transform: translate(-50%,-50%);
-}
-.cursor-ring {
-  width: 34px; height: 34px;
-  border: 1.5px solid rgba(245,255,0,.4);
-  border-radius: 50%;
-  position: fixed; top: 0; left: 0;
-  pointer-events: none; z-index: 9998;
-  transform: translate(-50%,-50%);
-  transition: width .4s cubic-bezier(.16,1,.3,1), height .4s cubic-bezier(.16,1,.3,1), border-color .3s, border-radius .3s, background .3s;
-}
-.cursor-ring.hovering { width: 54px; height: 54px; border-color: var(--accent); border-radius: 8px; }
-.cursor-ring.clicking { width: 18px; height: 18px; background: rgba(245,255,0,.2); }
-@media (pointer: coarse) { .cursor-dot, .cursor-ring { display: none; } }
-
 /* ============ SPLIT TEXT ============ */
 .split-line { overflow: hidden; display: block; }
 .split-line .line-inner {
@@ -2958,13 +2912,11 @@ section:hover::after { opacity: 1; }
   .wireframe-cube,
   .vortex-bg,
   #hero-canvas,
-  .cursor-dot,
-  .cursor-ring,
   .scroll-progress { display: none !important; }
 
   /* --- Navbar --- */
   .nav { padding: 0 16px; height: 60px; }
-  .nav-logo img { height: 36px; }
+  .nav-logo img { height: 52px; }
   .nav-links { display: none; }
   .nav-cta { padding: 10px 16px; font-size: 12px; }
 
@@ -3432,9 +3384,6 @@ body {
   <div class="vortex-ring"></div>
 </div>
 
-<!-- Custom cursor -->
-<div class="cursor-dot" id="cursorDot"></div>
-<div class="cursor-ring" id="cursorRing"></div>
 <div class="scroll-progress" id="scrollProgress"></div>
 
 <!-- Spiral scroll indicator -->
@@ -4220,35 +4169,7 @@ window.addEventListener('scroll', () => {
 })();
 
 
-const dot = document.getElementById('cursorDot');
-const ring = document.getElementById('cursorRing');
-
-if (dot && ring) {
-  let mouseX = 0, mouseY = 0;
-  let ringX = 0, ringY = 0;
-
-  document.addEventListener('mousemove', e => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    gsap.to(dot, { x: mouseX, y: mouseY, duration: 0.08, ease: 'none' });
-  });
-
-  (function animateRing() {
-    ringX += (mouseX - ringX) * 0.15;
-    ringY += (mouseY - ringY) * 0.15;
-    gsap.set(ring, { x: ringX, y: ringY });
-    requestAnimationFrame(animateRing);
-  })();
-
-  const hoverEls = document.querySelectorAll('a, button, .work-card, .faq-item, .btn-primary, .btn-secondary, .nav-cta, .feature');
-  hoverEls.forEach(el => {
-    el.addEventListener('mouseenter', () => ring.classList.add('hovering'));
-    el.addEventListener('mouseleave', () => ring.classList.remove('hovering'));
-  });
-
-  document.addEventListener('mousedown', () => ring.classList.add('clicking'));
-  document.addEventListener('mouseup', () => ring.classList.remove('clicking'));
-}
+// Cursore gestito da CDC Effects (data-cdc-cursor su <html>)
 
 // ============ HERO INTRO ============
 const heroTl = gsap.timeline({ delay: 2.4 }); // attende fine CDC loader (~2s + 0.4s fade-out)
