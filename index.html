@@ -14,7 +14,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Archivo:wght@700;900&family=Archivo+Narrow:wght@700;800&display=swap" rel="stylesheet">
 
 <!-- GSAP + ScrollTrigger -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -1572,7 +1572,7 @@ section:hover::after { opacity: 1; }
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Archivo:wght@700;900&family=Archivo+Narrow:wght@700;800&display=swap" rel="stylesheet">
 
 <!-- GSAP + ScrollTrigger -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -3460,6 +3460,8 @@ body {
   </div>
   <div class="container">
     <div class="hero-tag">CDCsite — Aprilia, Lazio</div>
+    <!-- CDC Logo scan-build animato -->
+    <span data-cdc="logo" data-text="CDCsite" data-loop="true" style="font-size:clamp(40px,6vw,80px); color:var(--accent); display:block; margin-bottom:24px;"></span>
     <h1>
       Siti web seri.<br>
       <span class="underline">Senza prezzi</span><br>
@@ -3581,6 +3583,8 @@ body {
 
 <!-- ============ FEATURES ============ -->
 <section>
+  <!-- CDC background griglia blueprint -->
+  <div data-cdc="bg-grid"></div>
   <div class="container">
     <div class="reveal">
       <div class="section-tag">Cosa include €300</div>
@@ -3899,6 +3903,8 @@ body {
 
 <!-- ============ ABOUT ============ -->
 <section id="chi-sono" class="about">
+  <!-- CDC background griglia blueprint -->
+  <div data-cdc="bg-grid"></div>
   <div class="container">
     <div class="reveal">
       <div class="section-tag">Chi sono</div>
@@ -3945,7 +3951,7 @@ body {
 
     <div class="reveal" style="max-width: 800px; margin-top: 32px;">
 
-      <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-item cdc-reveal" onclick="toggleFaq(this)">
         <div class="faq-question">
           Posso pagare a rate?
           <span class="faq-icon">+</span>
@@ -3955,7 +3961,7 @@ body {
         </div>
       </div>
 
-      <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-item cdc-reveal" onclick="toggleFaq(this)">
         <div class="faq-question">
           Il dominio è davvero mio?
           <span class="faq-icon">+</span>
@@ -3965,7 +3971,7 @@ body {
         </div>
       </div>
 
-      <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-item cdc-reveal" onclick="toggleFaq(this)">
         <div class="faq-question">
           Cosa succede se voglio aggiungere una pagina dopo?
           <span class="faq-icon">+</span>
@@ -3975,7 +3981,7 @@ body {
         </div>
       </div>
 
-      <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-item cdc-reveal" onclick="toggleFaq(this)">
         <div class="faq-question">
           Posso disdire l'abbonamento quando voglio?
           <span class="faq-icon">+</span>
@@ -3985,7 +3991,7 @@ body {
         </div>
       </div>
 
-      <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-item cdc-reveal" onclick="toggleFaq(this)">
         <div class="faq-question">
           Funziona bene su mobile?
           <span class="faq-icon">+</span>
@@ -3995,7 +4001,7 @@ body {
         </div>
       </div>
 
-      <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-item cdc-reveal" onclick="toggleFaq(this)">
         <div class="faq-question">
           E se voglio un e-commerce o qualcosa di più complesso?
           <span class="faq-icon">+</span>
@@ -4014,7 +4020,7 @@ body {
   <div class="wireframe-cube"></div>
   <div class="container">
     <div class="cta-logo">
-      <img src="logo.png" alt="CDCsite">
+      <span data-cdc="logo" data-text="CDCsite" data-loop="true" style="font-size:88px; color:var(--accent);"></span>
     </div>
     <h2>Il tuo sito,<br><span style="color: var(--accent);">pronto questa settimana.</span></h2>
     <p>Inizia oggi. In 48 ore hai già la bozza del tuo sito — senza pagare niente, senza firmare niente. Se non ti convince al 100%, non perdi un centesimo.</p>
@@ -4030,15 +4036,18 @@ body {
   </div>
 </section>
 
+<!-- CDC Marquee manifesto -->
+<div data-cdc="marquee" style="border-top:1px solid #1F1F1F; border-bottom:1px solid #1F1F1F; background:#0A0A0A;"></div>
+
 <!-- ============ FOOTER ============ -->
 <footer>
   <div class="container">
     <div class="footer-grid">
-      <div class="footer-brand">
+      <div class="footer-brand cdc-reveal">
         <img src="logo.png" alt="CDCsite" class="footer-logo">
         <p>Siti web professionali per piccole aziende. Da Aprilia (LT) a tutta Italia.</p>
       </div>
-      <div class="footer-col">
+      <div class="footer-col cdc-reveal">
         <h5>// Naviga</h5>
         <ul>
           <li><a href="#prezzi">Prezzi</a></li>
@@ -4048,7 +4057,7 @@ body {
           <li><a href="#chi-sono">Chi sono</a></li>
         </ul>
       </div>
-      <div class="footer-col">
+      <div class="footer-col cdc-reveal">
         <h5>// Contatti</h5>
         <ul>
           <li><a href="https://wa.me/393387797450">WhatsApp</a></li>
