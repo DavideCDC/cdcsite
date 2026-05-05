@@ -31,6 +31,18 @@
   --cdc-accent: #F5FF00;
   --cdc-ink-dark: #0A0A0A;
   --cdc-ink-light: #FAFAF7;
+}
+
+/* Fix CDC logo: cdc-effects.css sets color:transparent che rende text-stroke invisibile */
+.cdc-logo__text {
+  color: var(--accent) !important;
+}
+.cdc-logo__text-inner {
+  -webkit-text-fill-color: transparent !important;
+}
+
+:root {
+
   --bg: #0A0A0A;
   --bg-soft: #141414;
   --surface: #1A1A1A;
